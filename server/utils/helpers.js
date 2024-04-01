@@ -1,7 +1,19 @@
-import jwt from 'jsonwebtoken';
-import { writeFileSync, unlinkSync } from 'fs';
+/**
+ * @file utils/helpers.js
+ * @description This file contatins all helper functions.
+ */
+
 import { exec } from 'child_process';
+import { unlinkSync, writeFileSync } from 'fs';
+import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+
+/**
+ * @function generateJWToken
+ * @param {string} user
+ * @return {JWT} Returns JWT token
+ * @description This function creates a JWT token based on user details.
+ */
 
 export const generateJWToken = (user) => {
     const expiresIn = '2h'; // Token expiration time
@@ -15,6 +27,13 @@ export const generateJWToken = (user) => {
     return token;
 };
 
+/**
+ * @function runCodeInDocker
+ * @param {string} language
+ * @param {string} code
+ * @description This function creates files for user code and runs the code in Docker containers.
+ */
+
 export const runCodeInDocker = async (language, code) => {
     return new Promise((resolve, reject) => {
         const extensionMap = {
@@ -22,9 +41,7 @@ export const runCodeInDocker = async (language, code) => {
             'node': 'js',
             'java': 'java',
             'cpp': 'cpp',
-            'csharp': 'cs',
-            'rust': 'rs',
-            'r': 'r',
+            'rust': 'rs'
         };
 
         const fileExtension = extensionMap[language];

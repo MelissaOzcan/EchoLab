@@ -1,7 +1,12 @@
+/**
+ * @file api/compile.js
+ * @description This route recieves user submitted code, and runs it in a Docker container.
+ * The result is sent back to the client as a response.
+ */
+
 import { Router } from "express";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
-import { runCodeInDocker } from "../utils/helpers.js";
 
 const router = Router();
 

@@ -1,3 +1,8 @@
+/**
+ * @file config/mongoCollections.js
+ * @description Config file that manages all the collections for the MongoDB Database.
+ */
+
 import { dbConnection } from './mongoConnection.js';
 
 const getCollectionFn = (collection) => {

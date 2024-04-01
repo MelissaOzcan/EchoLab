@@ -1,6 +1,11 @@
-import express from 'express';
-import dotenv from 'dotenv';
+/**
+ * @file app.js
+ * @description Starts server with HTTP and WebSocket connection.
+ */
+
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import configRoutes from './api/index.js';

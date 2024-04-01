@@ -1,5 +1,10 @@
+/**
+ * @file api/home.js
+ * @description These are routes for Creating a Room and Joining an existing Room using the Room's ID
+ */
+
 import { Router } from 'express';
-import { createRoom, deleteRoom, getRoom } from '../data/rooms.js';
+import { createRoom, getRoom } from '../data/rooms.js';
 import { authorizeToken } from '../middleware/jwtAuthentication.js';
 import { apiLimiter } from '../middleware/rateLimiter.js';
 import { idCheck, parameterCheck, strValidCheck } from '../utils/validate.js';
@@ -24,24 +29,25 @@ router
             return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
         }
     })
-    .delete("/", apiLimiter, authorizeToken, async (req, res) => {
-        const { id } = req.body;
-        try {
-            parameterCheck(id);
-            strValidCheck(id);
-            id = idCheck(id);
-        } catch (err) {
-            return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
-        }
-        try {
-            const deletedRoom = await deleteRoom(id);
-            if (!deletedRoom) {
-                throw { status: 500, message: "Internal Server Error." };
-            }
-        } catch (err) {
-            return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
-        }
-    });
+// NOTE: This is not meant to be here. Will move it later.
+// .delete("/", apiLimiter, authorizeToken, async (req, res) => {
+//     const { id } = req.body;
+//     try {
+//         parameterCheck(id);
+//         strValidCheck(id);
+//         id = idCheck(id);
+//     } catch (err) {
+//         return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
+//     }
+//     try {
+//         const deletedRoom = await deleteRoom(id);
+//         if (!deletedRoom) {
+//             throw { status: 500, message: "Internal Server Error." };
+//         }
+//     } catch (err) {
+//         return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
+//     }
+// });
 
 router
     .post("/join", apiLimiter, authorizeToken, async (req, res) => {
@@ -55,7 +61,6 @@ router
         }
         try {
             const room = await getRoom(roomId);
-            console.log(room);
             if (!room) throw { status: 500, message: "Internal Server Error." };
             return res.status(200).json({ room });
         } catch (err) {

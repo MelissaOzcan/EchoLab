@@ -1,3 +1,8 @@
+/**
+ * @file config/mongoConnection.js
+ * @description Config file that manages connection to the database.
+ */
+
 import { MongoClient } from 'mongodb';
 import { mongoConfig } from './mongoSettings.js';
 
@@ -16,4 +21,5 @@ const closeConnection = async () => {
   await _connection.close();
 };
 
-export {dbConnection, closeConnection};
+export { dbConnection, closeConnection };
+

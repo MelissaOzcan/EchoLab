@@ -1,16 +1,26 @@
+/**
+ * @file data/users.js
+ * @description CRUD for users collection.
+ */
+
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import {users} from '../config/mongoCollections.js';
-import { 
-    parameterCheck, 
-    strValidCheck, 
-    usernameValidCheck, 
-    passwordValidCheck, 
-    emailValidCheck, 
-    checkUsernameUnique, 
-    checkEmailInUse 
+import { users } from '../config/mongoCollections.js';
+import {
+    checkEmailInUse, checkUsernameUnique, emailValidCheck, parameterCheck, passwordValidCheck, strValidCheck,
+    usernameValidCheck
 } from '../utils/validate.js';
 dotenv.config();
+
+/**
+ * @function createUser
+ * @param {string} username
+ * @param {string} email
+ * @param {string} password
+ * @return {object} Returns new User object
+ * @throws {InternalServerError} Throws ISR if MongoDB insertOne() fails 
+ * @description This function creates a new user using given username, email and password.
+ */
 
 export const createUser = async (username, email, password) => {
     parameterCheck(username, email, password);
@@ -33,10 +43,18 @@ export const createUser = async (username, email, password) => {
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-        throw {status: 500, message: 'Internal Server Error'};
+        throw { status: 500, message: 'Internal Server Error' };
     }
     return newUser;
 }
+
+/**
+ * @function getUserByEmail
+ * @param {string} email
+ * @return {object} Returns a User object corrosponding to the email passed in as argument.
+ * @throws {NotFound} Throws Not Found if no user with given email is found.
+ * @description This function finds a user with given email ID.
+ */
 
 export const getUserByEmail = async (email) => {
     parameterCheck(email);
@@ -44,12 +62,20 @@ export const getUserByEmail = async (email) => {
     emailValidCheck(email);
 
     const userCollection = await users();
-    const user = await userCollection.findOne({email: email});
+    const user = await userCollection.findOne({ email: email });
     if (!user) {
-        throw {status: 404, message: `No user with email: ${email}`};
+        throw { status: 404, message: `No user with email: ${email}` };
     }
     return user;
 }
+
+/**
+ * @function getUserByUsername
+ * @param {string} username
+ * @return {object} Returns a User object corrosponding to the username passed in as argument.
+ * @throws {NotFound} Throws Not Found if no user with given username is found.
+ * @description This function finds a user with given username.
+ */
 
 export const getUserByUsername = async (username) => {
     parameterCheck(username);
@@ -57,12 +83,22 @@ export const getUserByUsername = async (username) => {
     username = username.trim().toLowerCase();
 
     const userCollection = await users();
-    const user = await userCollection.findOne({username: username});
+    const user = await userCollection.findOne({ username: username });
     if (!user) {
-        throw {status: 404, message: `No user with username: ${username}`};
+        throw { status: 404, message: `No user with username: ${username}` };
     }
     return user;
 }
+
+/**
+ * @function authenticateUser
+ * @param {string} email
+ * @param {string} password
+ * @return {object} Returns User object.
+ * @throws {Unauthorized} Throws Unauthorized if email and password combination does not
+ * match Database records
+ * @description This is used to authenticate users trying to log into their accounts.
+ */
 
 export const authenticateUser = async (email, password) => {
     parameterCheck(email, password);
@@ -72,8 +108,8 @@ export const authenticateUser = async (email, password) => {
 
     const user = await getUserByEmail(email);
     const authentic = await bcrypt.compare(password, user.password);
-    if (!authentic) { 
-        throw {status: 401, message: 'Email and Password do not match'};
+    if (!authentic) {
+        throw { status: 401, message: 'Email and Password do not match' };
     } else {
         return user;
     }

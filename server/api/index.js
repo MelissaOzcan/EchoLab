@@ -1,8 +1,13 @@
+/**
+ * @file api/index.js
+ * @description Inward facing wrapper interface
+ */
+
+import compileRoutes from './compile.js';
 import editorRoutes from './editor.js';
+import homeRoutes from './home.js';
 import loginRoutes from './login.js';
 import registerRoutes from './register.js';
-import homeRoutes from './home.js';
-import compileRoutes from './compile.js';
 
 const constructorMethod = (app) => {
     app.use('/login', loginRoutes);

@@ -1,5 +1,11 @@
-import { __prod__ } from '../constants.js';
+/**
+ * @file config/mongoSettings.js
+ * @description Settings file that connects application to local MongoDB database in 
+ * development, and MongoDB Atlas in production
+ */
+
 import dotenv from 'dotenv';
+import { __prod__ } from '../constants.js';
 dotenv.config()
 
 export const mongoConfig = {
