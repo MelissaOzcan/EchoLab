@@ -14,7 +14,6 @@ const langOptions = new Set(["python", "cpp", "node", "rust", "java"]);
 
 router
     .post("/:language", apiLimiter, authorizeToken, async (req, res) => {
-        console.log("POST REQ coming to compile.js");
         const { code } = req.body;
         const { language } = req.params;
 

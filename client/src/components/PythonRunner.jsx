@@ -32,20 +32,17 @@ function PythonRunner() {
     })
 
     const handleEditorChange = (value) => {
-        // TODO: Need a request here to make sure all code changes are saved the the Database.
+        // Store updated code into DB after every change
+        setCode(value);
         (async () => {
             try {
-                console.log("HELLLOOOOOO");
-                await axios.post(`http://localhost:4000/editor/${id}`, { code: userCode, lang: 'python'}, {
+                await axios.post(`http://localhost:4000/editor/${id}`, { code: value, lang: 'python'}, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
             } catch (err) {
                 console.log(err);
             }
         })();
-        console.log("User Code: ", userCode);
-
-        setCode(value);
     };
 
     const handleSubmit = async (e) => {
@@ -69,6 +66,7 @@ function PythonRunner() {
             <form onSubmit={handleSubmit}>
                 <Editor
                     height="65vh"
+                    width="120vh"
                     defaultLanguage="python"
                     theme='vs-dark'
                     value={userCode}

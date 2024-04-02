@@ -23,7 +23,6 @@ export const generateJWToken = (user) => {
         email: user.email
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn });
-    console.log("\nToken Original Value: ", token);
     return token;
 };
 

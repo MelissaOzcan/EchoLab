@@ -72,8 +72,8 @@ export const getRoom = async (id) => {
  */
 
 export const updateRoom = async (id, lang, code) => {
-    parameterCheck(id, lang, code);
-    strValidCheck(id, lang, code);
+    parameterCheck(id, lang);
+    strValidCheck(id, lang);
     id = idCheck(id);
 
     const codeField = `${lang}Code`;

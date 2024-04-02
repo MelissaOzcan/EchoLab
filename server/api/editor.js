@@ -32,12 +32,11 @@ router
         }
     })
     .post("/:id", apiLimiter, authorizeToken, async (req, res) => {
-        console.log("HIIII");
         let { id } = req.params;
         const { code, lang } = req.body
         try {
-            parameterCheck(id, code, lang);
-            strValidCheck(id, code, lang);
+            parameterCheck(id, lang);
+            strValidCheck(id, lang);
             id = idCheck(id);
         } catch (err) {
             return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
