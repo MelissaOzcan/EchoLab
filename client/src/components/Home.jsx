@@ -55,6 +55,11 @@ function Home() {
                 <button type="submit">Join Room</button>
             </form>
             <br />
+            <button onClick={() => {
+                localStorage.removeItem('token');
+                navigate('/login');
+            }}>Sign Out</button>
+            <br />
             <form onSubmit={handleSubmitCreate}>
                 <button type="submit">Create New Room</button>
             </form>
