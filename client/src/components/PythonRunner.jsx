@@ -83,6 +83,11 @@ function PythonRunner() {
                         <pre>{error}</pre>
                 )}
             </div>
+            <button onClick={() => {
+                localStorage.removeItem('token');
+                navigate('/login');
+            }}>Sign Out</button>
+            <br />
         </div>
     );
 }
