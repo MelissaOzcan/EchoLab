@@ -12,8 +12,21 @@ function Login() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+
         if (token) {
-            navigate('/home');
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            console.log(decodedToken);
+            // Get the current time in seconds
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            // Check if the token has expired
+            if (decodedToken.exp < currentTime) {
+                // Token has expired
+                localStorage.removeItem('token');
+            } else {
+                // Token is still valid
+                navigate('/home');
+            }
         }
     }, [navigate]);
 
@@ -27,6 +40,8 @@ function Login() {
             const res = await axios.post('http://localhost:4000/login', loginData);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('username', res.data.username);
+            const decodedToken = JSON.parse(atob(res.data.token.split('.')[1]));
+            console.log(decodedToken);
             navigate("/home");
         } catch (err) {
             if (err.response.data.error) {

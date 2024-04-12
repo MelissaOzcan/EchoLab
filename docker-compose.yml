@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: EchoLab
+      MONGO_INITDB_ROOT_PASSWORD: password123  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: EchoLab
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password123
+      ME_CONFIG_MONGODB_URL: mongodb://EchoLab:password123@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+     - mongodb
+  server: 
+    build: ./server/
+    container_name: express-server
+    ports:
+      - 4000:4000
+    environment: 
+      NODE_ENV: "development" 
+      MONGO_SERVER_URL: "mongodb://EchoLab:password123@mongodb:27017"
+      MONGO_DATABASE_NAME: "EchoLab"
+    depends_on: 
+      - mongodb
+    
+  client: 
+    build: ./client/
+    container_name: react-client
+    ports:
+      - 3000:3000
+    depends_on: 
+      - server

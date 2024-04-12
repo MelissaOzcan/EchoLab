@@ -28,6 +28,8 @@ router
             await checkEmailInUse(email);
             await checkUsernameUnique(username);
         } catch (err) {
+            console.log("err : ",err)
+
             return res.status(err.status).json({ "error": err.message });
         }
 
@@ -35,6 +37,7 @@ router
             const newUser = await createUser(username, email, password);
             return res.status(200).json(newUser);
         } catch (err) {
+            console.log("err : ",err)
             return res.status(err.status).json({ "error": err.message });
         }
     })

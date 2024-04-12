@@ -25,6 +25,7 @@ router
             emailValidCheck(email);
         } catch (err) {
             return res.status(err.status).json({ "error": err.message });
+
         }
 
         try {
