@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * @function generateJWToken
  * @param {string} user
- * @return {JWT} Returns JWT token
+ * @return {token} Returns JWT token
  * @description This function creates a JWT token based on user details.
  */
 

@@ -7,6 +7,7 @@
 import { Router } from "express";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
+import { runCodeInDocker } from "../utils/helpers.js";
 
 const router = Router();
 
@@ -23,8 +24,8 @@ router
 
         try {
             // Mock output for testing
-            // const output = await runCodeInDocker(language, code);
-            const output = "SUCCESS";
+            // const output = "SUCCESS";
+            const output = await runCodeInDocker(language, code);
 
             res.status(200).json({ result: output });
         } catch (err) {
