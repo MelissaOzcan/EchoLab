@@ -10,9 +10,11 @@ import { v4 as uuidv4 } from 'uuid';
 import dotenv from "dotenv";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import redis from 'redis';
 
 dotenv.config()
-
+const client = redis.createClient();
+client.connect().then(() => {});
 /**
  * @function generateJWToken
  * @param {string} user
@@ -54,6 +56,14 @@ export const runCodeInDocker = async (language, code) => {
     const remoteFilePath = `/home/ubuntu/${language}-runner/${tempFileName}`;
 
     try {
+        // Check if the code already exists in Redis
+        const cachedOutput = await client.get(code + "," + language);
+        console.log("CachedOutput: " + cachedOutput)
+        if (cachedOutput) {
+            console.log("Returned from cache")
+            return cachedOutput;
+        }
+
         // Write user code to local file
         writeFileSync(localFilePath, code);
 
@@ -64,6 +74,10 @@ export const runCodeInDocker = async (language, code) => {
         await executeCommand(scpCommand);
         // Run Docker container on EC2 server
         const output = await executeCommand(sshCommand);
+
+        // Store the output in Redis
+        await client.set(code + "," + language, output);
+
         return output;
     } catch (error) {
         console.error('Error: ', error);
