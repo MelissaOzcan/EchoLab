@@ -4,9 +4,14 @@
  */
 
 import { exec } from 'child_process';
-import { unlinkSync, writeFileSync } from 'fs';
+import fs, { writeFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import dotenv from "dotenv";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+dotenv.config()
 
 /**
  * @function generateJWToken
@@ -26,43 +31,60 @@ export const generateJWToken = (user) => {
     return token;
 };
 
+
 /**
  * @function runCodeInDocker
  * @param {string} language
  * @param {string} code
  * @description This function creates files for user code and runs the code in Docker containers.
  */
-
 export const runCodeInDocker = async (language, code) => {
+    const extensionMap = {
+        'python': 'py',
+        'node': 'js',
+        'java': 'java',
+        'cpp': 'cpp',
+        'rust': 'rs'
+    };
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const sshKeyPath = path.join(__dirname, '../utils/NoumanSSH.pem');
+    const tempFileName = `code-${uuidv4()}.${extensionMap[language]}`;
+    const localFilePath = path.join(__dirname, tempFileName);
+    const remoteFilePath = `/home/ubuntu/${language}-runner/${tempFileName}`;
+
+    try {
+        // Write user code to local file
+        writeFileSync(localFilePath, code);
+
+        const scpCommand = `scp -i ${sshKeyPath} ${localFilePath} ubuntu@18.188.93.195:${remoteFilePath}`;
+        const sshCommand = `ssh -i ${sshKeyPath} ubuntu@18.188.93.195 'docker run --rm -v ${remoteFilePath}:/home/ubuntu/${language}-runner/code.py noumxn/${language}-runner'`;
+
+        // Copy local file to the EC2 server
+        await executeCommand(scpCommand);
+        // Run Docker container on EC2 server
+        const output = await executeCommand(sshCommand);
+
+        console.log("OUTPUT: ", output);
+        return output;
+    } catch (error) {
+        console.error('Error: ', error);
+        throw error;
+    } finally {
+        fs.unlinkSync(localFilePath);
+    }
+}
+
+function executeCommand(command) {
     return new Promise((resolve, reject) => {
-        const extensionMap = {
-            'python': 'py',
-            'node': 'js',
-            'java': 'java',
-            'cpp': 'cpp',
-            'rust': 'rs'
-        };
-
-        const fileExtension = extensionMap[language];
-        if (!fileExtension) {
-            return reject(new Error(`Unsupported language: ${language}`));
-        }
-
-        const tempFileName = `/tmp/code-${uuidv4()}.${fileExtension}`;
-        writeFileSync(tempFileName, code);
-
-        exec(`docker run --rm -v ${tempFileName}:/usr/src/app/code.${fileExtension} ${language}-runner`,
-            (error, stdout, stderr) => {
-                unlinkSync(tempFileName);
-
-                if (error) {
-                    return reject(error);
-                }
-                if (stderr) {
-                    return reject(stderr);
-                }
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+            } else if (stderr) {
+                reject(stderr);
+            } else {
                 resolve(stdout);
             }
-        );
+        });
     });
 }
