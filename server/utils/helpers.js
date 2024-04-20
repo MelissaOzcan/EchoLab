@@ -64,8 +64,6 @@ export const runCodeInDocker = async (language, code) => {
         await executeCommand(scpCommand);
         // Run Docker container on EC2 server
         const output = await executeCommand(sshCommand);
-
-        console.log("OUTPUT: ", output);
         return output;
     } catch (error) {
         console.error('Error: ', error);

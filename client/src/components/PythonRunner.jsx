@@ -40,6 +40,9 @@ function PythonRunner() {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
             } catch (err) {
+                if (err.status === 401 || err.error === 'Failed to authenticate token') {
+                    navigate('/login');
+                }
                 console.log(err);
             }
         })();
