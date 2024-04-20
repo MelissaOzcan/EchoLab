@@ -24,8 +24,8 @@ router
 
         try {
             // Mock output for testing
-            // const output = await runCodeInDocker(language, code);
-            const output = "SUCCESS";
+            // const output = "SUCCESS";
+            const output = await runCodeInDocker(language, code);
 
             res.status(200).json({ result: output });
         } catch (err) {

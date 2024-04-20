@@ -13,7 +13,13 @@ function Login() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            navigate('/home');
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const currentTimeInSecs = Math.floor(Date.now() / 1000);
+            if (decodedToken.exp < currentTimeInSecs) {
+                localStorage.removeItem('token');
+            } else {
+                navigate('/home');
+            }
         }
     }, [navigate]);
 
