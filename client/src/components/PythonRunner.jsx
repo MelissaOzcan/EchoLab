@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 function PythonRunner() {
     const [userCode, setCode] = useState('# Write your python code here...\n');
