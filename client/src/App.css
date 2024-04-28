@@ -109,10 +109,10 @@ form{
 
 @keyframes bubbleAnimation {
   0% {
-      bottom: -10px;  /* Start slightly below the viewport */
+      bottom: -10px; 
   }
   100% {
-      bottom: 110%;  /* Go above the viewport to ensure it travels the whole height */
+      bottom: 110%;
   }
 }
 
