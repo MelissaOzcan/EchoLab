@@ -10,10 +10,29 @@ function Home() {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
+        document.body.style.overflow = 'hidden';
         if (!token) {
             navigate('/login');
         }
+        const interval = setInterval(createBubble, 300);
+
+        return () => clearInterval(interval);
     }, [token, navigate]);
+
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        let size = Math.random() * 15 + 10; 
+        bubble.style.width = `${size}px`;
+        bubble.style.height = bubble.style.width;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.opacity = Math.random() * 0.5 + 0.5; 
+        document.querySelector('.background-static-home').appendChild(bubble);
+    
+        setTimeout(() => {
+            bubble.remove();
+        }, 10000);
+    }
 
 
     const handleSubmitCreate = async (e) => {
@@ -45,7 +64,8 @@ function Home() {
     };
 
     return (
-        <div>
+        <div className='background-static-home'>
+            <div className='form-container'>
             <h2>Welcome, {username}</h2>
             <form onSubmit={handleSubmitJoin}>
                 Room ID: 
@@ -64,6 +84,7 @@ function Home() {
                 <button type="submit">Create New Room</button>
             </form>
             <p>{error}</p>
+            </div>
         </div>
     );
 }

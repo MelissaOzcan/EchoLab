@@ -16,7 +16,26 @@ function Register() {
         if (token) {
             navigate('/lang/python');
         }
+
+        const interval = setInterval(createBubble, 300);
+
+        return () => clearInterval(interval);
     }, [navigate]);
+
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        let size = Math.random() * 15 + 10; 
+        bubble.style.width = `${size}px`;
+        bubble.style.height = bubble.style.width;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.opacity = Math.random() * 0.5 + 0.5; 
+        document.querySelector('.background-static').appendChild(bubble);
+    
+        setTimeout(() => {
+            bubble.remove();
+        }, 10000);
+    }
 
     const handleChange = (e) => {
         setUserData({...userData, [e.target.name]: e.target.value });
@@ -39,7 +58,7 @@ function Register() {
     };
 
     return (
-        <div>
+        <div className='background-static'>
             <div className='form-container'>
             <h2>Register</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}

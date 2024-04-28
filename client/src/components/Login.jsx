@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ function Login() {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
+        document.body.style.overflow = 'hidden';
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
@@ -21,7 +22,26 @@ function Login() {
                 navigate('/home');
             }
         }
+
+        const interval = setInterval(createBubble, 300);
+
+        return () => clearInterval(interval);
     }, [navigate]);
+
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        let size = Math.random() * 15 + 10; 
+        bubble.style.width = `${size}px`;
+        bubble.style.height = bubble.style.width;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.opacity = Math.random() * 0.5 + 0.5; 
+        document.querySelector('.background').appendChild(bubble);
+    
+        setTimeout(() => {
+            bubble.remove();
+        }, 10000);
+    }
 
     const handleChange = (e) => {
         setLoginData({...loginData, [e.target.name]: e.target.value });
@@ -35,7 +55,7 @@ function Login() {
             localStorage.setItem('username', res.data.username);
             navigate("/home");
         } catch (err) {
-            if (err.response.data.error) {
+            if (err.response && err.response.data.error) {
                 setErrorMessage(err.response.data.error);
             } else {
                 setErrorMessage('An error occurred. Please try again.');
@@ -44,7 +64,7 @@ function Login() {
     };
 
     return (
-        <div>
+        <div className='background'>
             <div className='form-container'>
             <h2>Login</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}

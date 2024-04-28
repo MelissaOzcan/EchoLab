@@ -3,19 +3,18 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: "Exo 2", sans-serif;
+  color: aliceblue;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+body{
+  background: black;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @keyframes logo-spin {
@@ -39,4 +38,126 @@
 
 .read-the-docs {
   color: #888;
+}
+
+@keyframes fillUp {
+  0% {
+      transform: translateY(100%);
+  }
+  100% {
+      transform: translateY(0%);
+  }
+}
+
+.background {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
+  overflow: hidden;
+  animation: fillUp 3s ease forwards;
+}
+
+.background-static {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
+  overflow: hidden;
+}
+
+.background-static-home {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
+  overflow: hidden;
+}
+
+.form-container{
+  pointer-events: auto;
+  position: relative;
+}
+
+@keyframes moveWave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-1000px);
+  }
+}
+
+
+@keyframes bubbleAnimation {
+  0% {
+      bottom: -10px; 
+  }
+  100% {
+      bottom: 110%;
+  }
+}
+
+.bubble {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: bubbleAnimation 10s linear infinite;
+  animation-delay: 0s;
+}
+
+a:visited{
+  color: pink;
+}
+a:hover{
+  color: purple;
+}
+
+input{
+  border-radius: 8px;
+  padding: 10px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  font-size:medium;
+}
+
+input:focus{
+  background-color: #f6f6f6;
+}
+
+input:hover{
+  background-color: #f6f6f6;
+}
+
+button{
+  border-radius: 8px;
+  padding: 8px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  text-align: center;
+  font-size:small;
+}
+
+button:hover{
+  background-color: #f6f6f6;
 }

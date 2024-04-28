@@ -8,6 +8,10 @@ import { Router } from "express";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 import { runCodeInDocker } from "../utils/helpers.js";
+import redis from 'redis';
+
+const client = redis.createClient();
+client.connect().then(() => {});
 
 const router = Router();
 
@@ -23,9 +27,20 @@ router
         }
 
         try {
-            // Mock output for testing
-            // const output = "SUCCESS";
-            const output = await runCodeInDocker(language, code);
+            let output;
+            // Check if the code already exists in Redis
+            const cachedOutput = await client.get(code + "," + language);
+            if (cachedOutput) {
+                console.log("Returned from cache")
+                output = cachedOutput;
+            }
+            else{
+                // Mock output for testing
+                const output = "SUCCESS";
+                //output = await runCodeInDocker(language, code);
+                await client.set(code + "," + language, output);
+            }
+            
 
             res.status(200).json({ result: output });
         } catch (err) {

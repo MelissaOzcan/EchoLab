@@ -64,7 +64,8 @@ function PythonRunner() {
     };
 
     return (
-        <div>
+        <div className='background-static'>
+            <div className='form-container'>
             <h2>Python Interpreter</h2>
             <form onSubmit={handleSubmit}>
                 <Editor
@@ -91,6 +92,7 @@ function PythonRunner() {
                 navigate('/login');
             }}>Sign Out</button>
             <br />
+            </div>
         </div>
     );
 }
