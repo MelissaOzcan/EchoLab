@@ -11,7 +11,7 @@ The Docker Images are uploaded to DockerHub:
 
 The Docker Images where uploaded from an AWS EC2 instance. The EC2 instance was also used to set up Docker Daemon. This allows EchoLab to make requests utilizing the Docker Images.
 
-You can use the key `NoumanSSH.pem` stored currently in `/Echolab/server/utils/` to SHH into the EC2 instance using the following command:
+You can use the key `DockerDaemonKey.pem` stored currently in `/Echolab/server/.ssh/` to SHH into the EC2 instance using the following command:
 ```bash
-ssh -i /path/to/NoumanSSH.pem ubuntu@18.188.93.195
+ssh -i /RELATIVE/PATH/TO/DockerDaemonKey.pem ubuntu@18.219.85.188
 ```
