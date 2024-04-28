@@ -7,3 +7,7 @@ package-lock.json
 *.vsidx
 .vs/EchoLab/v17/.wsuo
 .vs/VSWorkspaceState.json
+.vs/EchoLab/v17/Browse.VC.db-shm
+.vs/EchoLab/v17/Browse.VC.db-wal
+.vs/EchoLab/v17/Browse.VC.opendb
+.vs/EchoLab/v17/Browse.VC.db
