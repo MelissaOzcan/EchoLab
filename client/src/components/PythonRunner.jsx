@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from './Sidebar';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 
@@ -65,6 +66,7 @@ function PythonRunner() {
 
     return (
         <div>
+            <Sidebar />
             <h2>Python Interpreter</h2>
             <form onSubmit={handleSubmit}>
                 <Editor
