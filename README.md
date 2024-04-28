@@ -6,10 +6,16 @@ EchoLab is a web application designed to revolutionize the way developers, stude
 By combining coding with voice communication, EchoLab offers an immersive learning experience that mimics in-person collaboration, making it especially beneficial for remote education. Whether for professional development teams, student projects, or coding bootcamps, EchoLab streamlines the process of working together on code, reducing barriers to effective collaboration. Accessible from anywhere with an internet connection, it breaks down geographical barriers, enabling global collaboration and learning opportunities.
 
 ## How to Setup
-1. Navigate to the root directory and run `npm install` to install the required dependencies for our project.
-2. Navigate to the server directory and run `npm start` to start the server.
-3. In another console window, navigate to the client directory and run `npm run dev` to start the client application in development mode.
-4. Navigate to http://localhost:5173/ in your web browser.
+```bash
+git clone https://github.com/MelissaOzcan/EchoLab.git
+cd EchoLab/
+cd server/
+npm i
+npm start
+cd ../client/
+npm i
+npm start
+```
 
 ## Contributors:
 - Nouman Syed
