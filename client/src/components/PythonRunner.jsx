@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
+import { Peer } from "peerjs";
 
 function PythonRunner() {
   const [userCode, setCode] = useState("# Write your python code here...\n");
@@ -11,6 +12,23 @@ function PythonRunner() {
   const navigate = useNavigate();
   const id = localStorage.getItem("room-ID");
   const token = localStorage.getItem("token");
+
+  const [peerID, setPeerID] = useState(null);
+
+  useEffect(() => {
+    console.log("Creating peer");
+    try {
+      const peer = new Peer();
+      console.log(peer);
+      
+      peer.on("open", function (id) {
+        console.log("My peer ID is: " + id);
+        setPeerID(id);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   useEffect(() => {
     if (!token) {
