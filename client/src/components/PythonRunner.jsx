@@ -32,7 +32,7 @@ function PythonRunner() {
         return () => {
             socketRef.disconnect();
         };
-    }, [code]);
+    }, [userCode]);
 
     const fetchCode = async () => {
         try {
