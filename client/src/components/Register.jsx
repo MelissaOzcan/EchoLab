@@ -39,7 +39,7 @@ function Register() {
     };
 
     return (
-        <div>
+        <div className='background'>
             <div className='form-container'>
             <h2>Register</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
