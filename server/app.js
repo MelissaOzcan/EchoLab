@@ -8,7 +8,6 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import configRoutes from './api/index.js';
-import setupWebSocket from './sockets/socketManager.js';
 
 dotenv.config();
 
@@ -16,31 +15,37 @@ const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
     cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
+        origin: '*'
     }
 });
 
-app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'], 
-    credentials: true // If you're using cookies or other credentials
-}));
+const corsOptions = {
+    origin: `http://localhost:${process.env.CLIENT_PORT}`,
+    optionsSuccessStatus: 200
+};
 
-io.use((socket, next) => {
-    const origin = socket.handshake.headers.origin;
-    if (origin && (origin === 'http://localhost:5173' || origin === `http://localhost:${process.env.CLIENT_PORT}`)) {
-        return next();
-    }
-    return next(new Error('Invalid CORS origin'));
-});
-
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 configRoutes(app);
-setupWebSocket(io);
-io.listen(5173);
+
+io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    socket.on('joinChannel', (channel) => {
+        socket.join(channel);
+        console.log(`User ${socket.id} joined channel ${channel}`);
+    });
+
+    socket.on('codeChange', ({ channel, code }) => {
+        io.emit('codeUpdate', {channel, code});
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.id}`);
+    });
+});
 
 httpServer.listen(process.env.PORT, () => {
     console.log(`We've got a server with HTTP and WebSocket on http://localhost:${process.env.PORT}/`);

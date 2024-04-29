@@ -5,14 +5,21 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 function PythonRunner() {
-    const [userCode, setCode] = useState('# Write your python code here...\n');
+    const [userCode, setCode] = useState({code: '# Write your python code here...\n'});
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const id = localStorage.getItem('room-ID');
     const token = localStorage.getItem('token');
-    const socketRef = io('http://localhost:4000');
-    let code;
+    const socketRef = useRef();
+    console.log("id:" + id)
+
+    useEffect(() => {
+        socketRef.current = io('http://localhost:4000');
+        return () => {
+          socketRef.current.disconnect();
+        };
+      }, []);
 
     useEffect(() => {
         if (!token) {
@@ -23,16 +30,18 @@ function PythonRunner() {
     }, [navigate, token]);
 
     useEffect(() => {
-        // Listen for code updates from other users
-        socketRef.on('codeUpdate', ({ code }) => {
-            console.log(`Received code update: ${code}`);
-            setCode(code); // Update code in the editor
+        socketRef.current.on('codeUpdate', ({ channel, code }) => {
+            console.log("roomId:" + channel)
+            if (channel === id) {
+                console.log(`Received code update for room ${channel}: ${code}`);
+                setCode(code); // Update code in the editor
+            }
         });
-
         return () => {
-            socketRef.disconnect();
+            socketRef.current.off('codeUpdate');
         };
-    }, [userCode]);
+    }, [id]);
+
 
     const fetchCode = async () => {
         try {
@@ -51,7 +60,7 @@ function PythonRunner() {
         console.log('Emitting codeChange event:', { channel: id, code: value });
 
         // Emit codeChange event to WebSocket server
-        socketRef.emit('codeChange', { channel: id, code: value });
+        socketRef.current.emit('codeChange', {channel: id, code: value});
 
         console.log('codeChange event emitted successfully');
 
