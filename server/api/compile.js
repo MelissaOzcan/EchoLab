@@ -9,6 +9,7 @@ import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 import { runCodeInDocker } from "../utils/helpers.js";
 import redis from 'redis';
+import crypto from 'crypto';
 
 const client = redis.createClient();
 client.connect().then(() => {});
@@ -26,19 +27,17 @@ router
             return res.status(400).json({ "error": `'${language}' is not available.` });
         }
 
+        const hash = crypto.createHash('sha256').update(code + language).digest('hex');
+
         try {
             let output;
-            // Check if the code already exists in Redis
-            const cachedOutput = await client.get(code + "," + language);
+            const cachedOutput = await client.get(hash);
             if (cachedOutput) {
-                console.log("Returned from cache")
                 output = cachedOutput;
             }
             else{
-                // Mock output for testing
-                // const output = "SUCCESS";
                 output = await runCodeInDocker(language, code);
-                await client.set(code + "," + language, output);
+                await client.set(hash, output);
             }
             
 
