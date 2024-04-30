@@ -31,7 +31,7 @@ function Login() {
     function createBubble() {
         const bubble = document.createElement('div');
         bubble.classList.add('bubble');
-        let size = Math.random() * 10 + 5; 
+        let size = Math.random() * 15 + 10; 
         bubble.style.width = `${size}px`;
         bubble.style.height = bubble.style.width;
         bubble.style.left = `${Math.random() * 100}%`;
