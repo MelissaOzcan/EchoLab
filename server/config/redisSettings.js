@@ -4,7 +4,6 @@
  */
 
 import dotenv from 'dotenv';
-import { __prod__ } from '../constants.js';
 dotenv.config()
 
 export const redisConfig = {
