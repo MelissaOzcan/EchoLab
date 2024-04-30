@@ -57,8 +57,8 @@ export const runCodeInDocker = async (language, code) => {
         // Write user code to local file
         writeFileSync(localFilePath, code);
 
-        const scpCommand = `scp -i ${sshKeyPath} ${localFilePath} ubuntu@18.219.85.188:${remoteFilePath}`;
-        const sshCommand = `ssh -i ${sshKeyPath} ubuntu@18.219.85.188 'docker run --rm -v ${remoteFilePath}:` + 
+        const scpCommand = `scp -o StrictHostKeyChecking=no -i ${sshKeyPath} ${localFilePath} ubuntu@18.219.85.188:${remoteFilePath}`;
+        const sshCommand = `ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} ubuntu@18.219.85.188 'docker run --rm -v ${remoteFilePath}:` + 
             `/home/ubuntu/EchoLab/docker/${language}-runner/code.${extensionMap[language]} noumxn/${language}-runner'`;
 
         // Copy local file to the EC2 server

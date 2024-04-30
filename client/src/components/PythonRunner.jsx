@@ -5,7 +5,8 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 function PythonRunner() {
-    const [userCode, setCode] = useState({code: '# Write your python code here...\n'});
+    const [userCode, setCode] = useState('');
+    const [isEditorReady, setEditorReady] = useState(false);
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -34,7 +35,8 @@ function PythonRunner() {
             console.log("roomId:" + channel)
             if (channel === id) {
                 console.log(`Received code update for room ${channel}: ${code}`);
-                setCode(code); // Update code in the editor
+                setCode(code);
+                setEditorReady(true);
             }
         });
         return () => {
@@ -49,22 +51,17 @@ function PythonRunner() {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setCode(res.data.room.pythonCode);
+            setEditorReady(true);
         } catch (err) {
             console.log(err);
         }
     };
 
     const handleEditorChange = (value) => {
-        // Store updated code into DB after every change
         setCode(value);
         console.log('Emitting codeChange event:', { channel: id, code: value });
-
-        // Emit codeChange event to WebSocket server
         socketRef.current.emit('codeChange', {channel: id, code: value});
-
         console.log('codeChange event emitted successfully');
-
-        // Update code in the database
         updateCodeInDatabase(value);
     };
 
@@ -99,24 +96,22 @@ function PythonRunner() {
         <div>
             <h2>Python Interpreter</h2>
             <form onSubmit={handleSubmit}>
-                <Editor
-                    height="65vh"
-                    width="120vh"
-                    defaultLanguage="python"
-                    theme='vs-dark'
-                    value={userCode}
-                    onChange={handleEditorChange}
-                />
+                {isEditorReady && (
+                    <Editor
+                        height="65vh"
+                        width="120vh"
+                        defaultLanguage="python"
+                        theme='vs-dark'
+                        value={userCode}
+                        onChange={handleEditorChange}
+                    />
+                )}
                 <button type="submit">Run</button>
             </form>
             <div className="output-container">
                 OUTPUT:
-                {output && (
-                    <pre>{output}</pre>
-                )}
-                {error && (
-                    <pre>{error}</pre>
-                )}
+                {output && (<pre>{output}</pre>)}
+                {error && (<pre>{error}</pre>)}
             </div>
             <button onClick={() => {
                 localStorage.removeItem('token');

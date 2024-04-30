@@ -25,11 +25,11 @@ export const createRoom = async (username) => {
 
     const newRoom = {
         participants: [username],
-        pythonCode: "",
-        javaCode: "",
-        nodeCode: "",
-        cppCode: "",
-        rustCode: ""
+        pythonCode: "# Write your Python3 code here...\n",
+        javaCode: "// Write your Java code here...\n",
+        nodeCode: "// Write your JavaScript code here...\n",
+        cppCode: "// Write your C++ code here...\n",
+        rustCode: "// Write your Rust code here...\n"
     }
     const roomCollection = await rooms();
     const insertInfo = await roomCollection.insertOne(newRoom);
