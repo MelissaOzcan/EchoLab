@@ -8,10 +8,11 @@ import { Router } from "express";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 import { runCodeInDocker } from "../utils/helpers.js";
+import { redisConfig } from "../config/redisSettings.js";
 import redis from 'redis';
 import crypto from 'crypto';
 
-const client = redis.createClient();
+const client = redis.createClient(redisConfig);
 client.connect().then(() => {});
 
 const router = Router();
