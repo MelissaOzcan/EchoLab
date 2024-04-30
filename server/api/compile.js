@@ -36,8 +36,8 @@ router
             }
             else{
                 // Mock output for testing
-                const output = "SUCCESS";
-                //output = await runCodeInDocker(language, code);
+                // const output = "SUCCESS";
+                output = await runCodeInDocker(language, code);
                 await client.set(code + "," + language, output);
             }
             

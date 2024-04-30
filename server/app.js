@@ -2,7 +2,6 @@
  * @file app.js
  * @description Starts server with HTTP and WebSocket connection.
  */
-
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -16,8 +15,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
     cors: {
-        origin: `http://localhost:${process.env.CLIENT_PORT}`,
-        methods: ['GET', 'POST']
+        origin: '*'
     }
 });
 
@@ -41,7 +39,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('codeChange', ({ channel, code }) => {
-        socket.to(channel).emit('codeUpdate', code);
+        io.emit('codeUpdate', {channel, code});
     });
 
     socket.on('disconnect', () => {
