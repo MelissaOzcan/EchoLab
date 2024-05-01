@@ -57,11 +57,13 @@ form{
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly; /* Adjusts spacing */
   background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
   overflow: hidden;
   animation: fillUp 3s ease forwards;
+  justify-content: flex-start;
 }
 
 .background-static {
@@ -72,8 +74,10 @@ form{
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  justify-content: flex-start;
   background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
   overflow: hidden;
 }
@@ -86,8 +90,10 @@ form{
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  justify-content: flex-start;
   background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
   overflow: hidden;
 }
@@ -95,6 +101,10 @@ form{
 .form-container{
   pointer-events: auto;
   position: relative;
+  width: 300px; /* Fixed width */
+  padding: 20px;
+  border-radius: 8px; /* Rounds corners */
+  margin: 20px 0; /* Adds vertical margin */
 }
 
 @keyframes moveWave {
@@ -161,3 +171,33 @@ button{
 button:hover{
   background-color: #f6f6f6;
 }
+
+.App-header {
+  width: 100%;
+  height: 30%; /* Adjusted to auto to accommodate the logo's height */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  padding-top: 5%;
+}
+
+@keyframes pulsate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);  /* No vertical movement, original size */
+  }
+  25%, 75% {
+    transform: translateY(-20px) rotate(3deg); /* Slightly larger, moved up */
+  }
+  50% {
+    transform: translateY(0) rotate(-3deg); /* Maximum size, back to original position */
+  }
+}
+
+.App-logo {
+  pointer-events: none;
+  height: 500px; /* Maintains the aspect ratio */
+  width: 500px; /* Adjust according to the size you want for your logo */
+  z-index: 1;
+  animation: pulsate 8s infinite ease-in-out;
+}
+

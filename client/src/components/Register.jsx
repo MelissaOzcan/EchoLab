@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Echo from '../assets/Echo.png';
 
 function Register() {
     const navigate = useNavigate();
@@ -59,6 +60,9 @@ function Register() {
 
     return (
         <div className='background-static'>
+            <div className="App-header">
+               <img src={Echo} className="App-logo" alt="logo" />
+             </div>
             <div className='form-container'>
             <h2>Register</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}

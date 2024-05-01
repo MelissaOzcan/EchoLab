@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Echo from '../assets/Echo.png';
 
 function Home() {
     const navigate = useNavigate();
@@ -65,6 +66,9 @@ function Home() {
 
     return (
         <div className='background-static-home'>
+            <div className="App-header">
+               <img src={Echo} className="App-logo" alt="logo" />
+             </div>
             <div className='form-container'>
             <h2>Welcome, {username}</h2>
             <form onSubmit={handleSubmitJoin}>

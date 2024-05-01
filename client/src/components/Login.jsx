@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Echo from '../assets/Echo.png';
+
 
 function Login() {
     const navigate = useNavigate();
@@ -65,6 +67,9 @@ function Login() {
 
     return (
         <div className='background'>
+            <div className="App-header">
+               <img src={Echo} className="App-logo" alt="logo" />
+             </div>
             <div className='form-container'>
             <h2>Login</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
