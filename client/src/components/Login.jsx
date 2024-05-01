@@ -66,11 +66,13 @@ function Login() {
     };
 
     return (
+        <>
         <div className='background'>
             <div className="App-header">
                <img src={Echo} className="App-logo" alt="logo" />
              </div>
-            <div className='form-container'>
+        </div>
+            <div className='form-container-2'>
             <h2>Login</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                 <form onSubmit={handleSubmit}>
@@ -94,7 +96,7 @@ function Login() {
                 </form>
             <p>Don&apos;t have an account? <Link to="/register">Register here</Link></p>
             </div>
-        </div>
+        </>
     );
 }
 
