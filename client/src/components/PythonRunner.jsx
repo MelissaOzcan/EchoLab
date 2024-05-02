@@ -13,7 +13,6 @@ function PythonRunner() {
     const id = localStorage.getItem('room-ID');
     const token = localStorage.getItem('token');
     const socketRef = useRef();
-    console.log("id:" + id)
 
     useEffect(() => {
         socketRef.current = io('http://localhost:4000');

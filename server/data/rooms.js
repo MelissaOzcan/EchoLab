@@ -115,9 +115,11 @@ export const joinRoom = async (id, username) => {
 
     await getUserByUsername(username);
 
-    const updatedParticipants = room.participants.push(username);
+    const updatedParticipants = {
+        $push: {participants: username}
+    };
 
-    const updatedRoom = await roomCollection.findOneAndReplace(
+    const updatedRoom = await roomCollection.findOneAndUpdate(
         { _id: new ObjectId(id) },
         updatedParticipants,
         { returnDocument: 'after' }
