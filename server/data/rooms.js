@@ -25,11 +25,11 @@ export const createRoom = async (username) => {
 
     const newRoom = {
         participants: [username],
-        pythonCode: "",
-        javaCode: "",
-        nodeCode: "",
-        cppCode: "",
-        rustCode: ""
+        pythonCode: "# Write your Python3 code here...\n",
+        javaCode: "// Write your Java code here...\n",
+        nodeCode: "// Write your JavaScript code here...\n",
+        cppCode: "// Write your C++ code here...\n",
+        rustCode: "// Write your Rust code here...\n"
     }
     const roomCollection = await rooms();
     const insertInfo = await roomCollection.insertOne(newRoom);
@@ -115,9 +115,11 @@ export const joinRoom = async (id, username) => {
 
     await getUserByUsername(username);
 
-    const updatedParticipants = room.participants.push(username);
+    const updatedParticipants = {
+        $push: {participants: username}
+    };
 
-    const updatedRoom = await roomCollection.findOneAndReplace(
+    const updatedRoom = await roomCollection.findOneAndUpdate(
         { _id: new ObjectId(id) },
         updatedParticipants,
         { returnDocument: 'after' }

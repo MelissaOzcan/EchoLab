@@ -7,7 +7,10 @@ package-lock.json
 *.vsidx
 .vs/EchoLab/v17/.wsuo
 .vs/VSWorkspaceState.json
+.vs/EchoLab/v17/Browse.VC.db
 .vs/EchoLab/v17/Browse.VC.db-shm
 .vs/EchoLab/v17/Browse.VC.db-wal
 .vs/EchoLab/v17/Browse.VC.opendb
 .vs/EchoLab/v17/Browse.VC.db
+FinalProject/
+server/utils/code-ca3cff18-e53d-4c3b-b628-e5e174e868c3.py

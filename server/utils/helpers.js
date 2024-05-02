@@ -48,17 +48,18 @@ export const runCodeInDocker = async (language, code) => {
     };
 
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const sshKeyPath = path.join(__dirname, '../utils/NoumanSSH.pem');
+    const sshKeyPath = path.join(__dirname, '../.ssh/DockerDaemonKey.pem');
     const tempFileName = `code-${uuidv4()}.${extensionMap[language]}`;
     const localFilePath = path.join(__dirname, tempFileName);
-    const remoteFilePath = `/home/ubuntu/${language}-runner/${tempFileName}`;
+    const remoteFilePath = `/home/ubuntu/EchoLab/docker/${language}-runner/${tempFileName}`;
 
     try {
         // Write user code to local file
         writeFileSync(localFilePath, code);
 
-        const scpCommand = `scp -i ${sshKeyPath} ${localFilePath} ubuntu@18.188.93.195:${remoteFilePath}`;
-        const sshCommand = `ssh -i ${sshKeyPath} ubuntu@18.188.93.195 'docker run --rm -v ${remoteFilePath}:/home/ubuntu/${language}-runner/code.py noumxn/${language}-runner'`;
+        const scpCommand = `scp -o StrictHostKeyChecking=no -i ${sshKeyPath} ${localFilePath} ubuntu@18.219.85.188:${remoteFilePath}`;
+        const sshCommand = `ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} ubuntu@18.219.85.188 'docker run --rm -v ${remoteFilePath}:` + 
+            `/home/ubuntu/EchoLab/docker/${language}-runner/code.${extensionMap[language]} noumxn/${language}-runner'`;
 
         // Copy local file to the EC2 server
         await executeCommand(scpCommand);
@@ -69,6 +70,8 @@ export const runCodeInDocker = async (language, code) => {
         console.error('Error: ', error);
         throw error;
     } finally {
+        const deleteCommand = `ssh -i ${sshKeyPath} ubuntu@18.219.85.188 'rm -f ${remoteFilePath}'`;
+        await executeCommand(deleteCommand);
         fs.unlinkSync(localFilePath);
     }
 }

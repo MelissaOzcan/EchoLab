@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Echo from '../assets/Echo.png';
+
 
 function Login() {
     const navigate = useNavigate();
@@ -11,6 +13,7 @@ function Login() {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
+        document.body.style.overflow = 'hidden';
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
@@ -21,7 +24,26 @@ function Login() {
                 navigate('/home');
             }
         }
+
+        const interval = setInterval(createBubble, 300);
+
+        return () => clearInterval(interval);
     }, [navigate]);
+
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        let size = Math.random() * 15 + 10; 
+        bubble.style.width = `${size}px`;
+        bubble.style.height = bubble.style.width;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.opacity = Math.random() * 0.5 + 0.5; 
+        document.querySelector('.background').appendChild(bubble);
+    
+        setTimeout(() => {
+            bubble.remove();
+        }, 10000);
+    }
 
     const handleChange = (e) => {
         setLoginData({...loginData, [e.target.name]: e.target.value });
@@ -35,7 +57,7 @@ function Login() {
             localStorage.setItem('username', res.data.username);
             navigate("/home");
         } catch (err) {
-            if (err.response.data.error) {
+            if (err.response && err.response.data.error) {
                 setErrorMessage(err.response.data.error);
             } else {
                 setErrorMessage('An error occurred. Please try again.');
@@ -44,8 +66,13 @@ function Login() {
     };
 
     return (
-        <div>
-            <div className='form-container'>
+        <>
+        <div className='background'>
+            <div className="App-header">
+               <img src={Echo} className="App-logo" alt="logo" />
+             </div>
+        </div>
+            <div className='form-container-2'>
             <h2>Login</h2>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                 <form onSubmit={handleSubmit}>
@@ -69,7 +96,7 @@ function Login() {
                 </form>
             <p>Don&apos;t have an account? <Link to="/register">Register here</Link></p>
             </div>
-        </div>
+        </>
     );
 }
 
