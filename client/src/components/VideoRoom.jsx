@@ -63,10 +63,9 @@ export const VideoRoom = () => {
 
   return (
     <div>
-      <h2>Video Room</h2>
-      {/* {users.map((user) => (
+      {users.map((user) => (
         <VideoPlayer key={user.uid} user={user} />
-      ))} */}
+      ))}
     </div>
   );
 };
