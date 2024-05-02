@@ -52,7 +52,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4000/login', loginData);
+            const res = await axios.post('http://localhost:4001/login', loginData);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('username', res.data.username);
             navigate("/home");

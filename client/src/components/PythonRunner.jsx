@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import Sidebar from './Sidebar';
 
 function PythonRunner() {
     const [userCode, setCode] = useState('');
@@ -15,7 +16,7 @@ function PythonRunner() {
     const socketRef = useRef();
 
     useEffect(() => {
-        socketRef.current = io('http://localhost:4000');
+        socketRef.current = io('http://localhost:4001');
         return () => {
           socketRef.current.disconnect();
         };
@@ -46,7 +47,7 @@ function PythonRunner() {
 
     const fetchCode = async () => {
         try {
-            const res = await axios.get(`http://localhost:4000/editor/${id}`, {
+            const res = await axios.get(`http://localhost:4001/editor/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setCode(res.data.room.pythonCode);
@@ -66,7 +67,7 @@ function PythonRunner() {
 
     const updateCodeInDatabase = async (code) => {
         try {
-            await axios.post(`http://localhost:4000/editor/${id}`, { code: code, lang: 'python' }, {
+            await axios.post(`http://localhost:4001/editor/${id}`, { code: code, lang: 'python' }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (err) {
@@ -82,7 +83,7 @@ function PythonRunner() {
         setOutput('');
         setError('');
         try {
-            const res = await axios.post(`http://localhost:4000/compile/python`, { code: userCode }, {
+            const res = await axios.post(`http://localhost:4001/compile/python`, { code: userCode }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setOutput(res.data.result);
@@ -94,7 +95,8 @@ function PythonRunner() {
     return (
         <div className='background-static'>
             <div className='form-container'>
-            <h2>Python Interpreter</h2>
+            <Sidebar />
+            <h2 className=''>Python Interpreter</h2>
             <form onSubmit={handleSubmit}>
                 {isEditorReady && (
                     <Editor
