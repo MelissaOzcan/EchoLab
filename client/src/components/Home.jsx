@@ -39,7 +39,7 @@ function Home() {
     const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4001/home', { username: username }, {
+            const res = await axios.post('http://localhost:4000/home', { username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.newRoom._id;
@@ -53,7 +53,7 @@ function Home() {
     const handleSubmitJoin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:4001/home/join`, { roomId: roomId, username: username }, {
+            const res = await axios.post(`http://localhost:4000/home/join`, { roomId: roomId, username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.room._id

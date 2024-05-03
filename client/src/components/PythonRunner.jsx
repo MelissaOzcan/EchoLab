@@ -16,7 +16,7 @@ function PythonRunner() {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:4001");
+    socketRef.current = io("http://localhost:4000");
     return () => {
       socketRef.current.disconnect();
     };
@@ -46,7 +46,7 @@ function PythonRunner() {
 
   const fetchCode = async () => {
     try {
-      const res = await axios.get(`http://localhost:4001/editor/${id}`, {
+      const res = await axios.get(`http://localhost:4000/editor/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCode(res.data.room.pythonCode);
@@ -67,7 +67,7 @@ function PythonRunner() {
   const updateCodeInDatabase = async (code) => {
     try {
       await axios.post(
-        `http://localhost:4001/editor/${id}`,
+        `http://localhost:4000/editor/${id}`,
         { code: code, lang: "python" },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -87,7 +87,7 @@ function PythonRunner() {
     setError("");
     try {
       const res = await axios.post(
-        `http://localhost:4001/compile/python`,
+        `http://localhost:4000/compile/python`,
         { code: userCode },
         {
           headers: { Authorization: `Bearer ${token}` },
