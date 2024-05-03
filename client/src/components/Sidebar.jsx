@@ -1,24 +1,24 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VoiceChannel from "./VoiceChannel";
 import { LuHome } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
 import "../index.css";
 
 function Sidebar() {
+    let [participants, setParticipants] = React.useState([]);
     const room = localStorage.getItem("room-ID");
-    // console.log(localStorage);
-    // console.log(room);
-
+    const navigate = useNavigate();
     //leave room function
     const leaveRoom = () => {
-        //localStorage.removeItem("room-ID");
-        console.log("Room left");
+        localStorage.removeItem("room-id");
+        navigate("/login");
     };
     const token = localStorage.getItem("token");
 
-    let [participants, setParticipants] = React.useState([]);
+    
     useEffect(() => {
         const fetchParticipants = async () => {
             try {
