@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VoiceChannel from "./VoiceChannel";
-import { LuHome } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
 import "../index.css";
 
@@ -51,12 +50,6 @@ function Sidebar() {
             <hr className="border-gray-700" />
             <div>
                 <ul className="mt-4">
-                    <li className="text-white rounded hover:shadow py-2">
-                        <a href="#" className="py-3">
-                            <LuHome className="inline-block w-6 h-6 mr-2 -mt-2" />
-                            Home
-                        </a>
-                    </li>
                     <li className="text-white rounded hover:shadow py-2">
                         <a href="#" className="py-3">
                             <LuSettings2 className="inline-block w-6 h-6 mr-2 -mt-2" />
