@@ -2,11 +2,17 @@ import React from "react";
 import VoiceChannel from "./VoiceChannel";
 import { LuHome } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
-import '../index.css';
+import "../index.css";
 
 function Sidebar() {
   const room = localStorage.getItem("room-ID");
   console.log(room);
+  
+  //leave room function
+  const leaveRoom = () => {
+    //localStorage.removeItem("room-ID");
+    console.log("Room left");
+  };
 
   return (
     <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
@@ -33,14 +39,14 @@ function Sidebar() {
       </div>
       <hr className="border-gray-700" />
       <div>
-        <VoiceChannel/>
+        <VoiceChannel />
       </div>
       <hr className="border-gray-700" />
-        <div className="mt-4">
-            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-            Leave Room
-            </button>
-        </div>
+      <div className="mt-4">
+        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={leaveRoom}>
+          Leave Room
+        </button>
+      </div>
     </div>
   );
 }
