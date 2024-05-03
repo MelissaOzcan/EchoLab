@@ -17,7 +17,7 @@ export default {
 
       },
       fontFamily: {
-        body: ["Poppins"],
+        body: ["Poppins", "Exo 2", "sans-serif"],
       },
     },
   },

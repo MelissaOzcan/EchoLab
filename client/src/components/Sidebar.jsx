@@ -9,9 +9,9 @@ function Sidebar() {
   console.log(room);
 
   return (
-    <div className="bg-gray-800 bg-opacity-50 w-64 h-full px-4 py-2 flex flex-col">
+    <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
       <div className="my-2 mb-4">
-        <h1 className="text-2xl text-red-500">EchoLab</h1>
+        <h1 className="text-2xl">EchoLab</h1>
         <h2 className="text-gray-400">Room: {room}</h2>
       </div>
       <hr className="border-gray-700" />
