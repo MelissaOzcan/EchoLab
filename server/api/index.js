@@ -7,9 +7,11 @@ import compileRoutes from './compile.js';
 import editorRoutes from './editor.js';
 import homeRoutes from './home.js';
 import loginRoutes from './login.js';
+import logoutRoutes from './logout.js';
 import registerRoutes from './register.js';
 
 const constructorMethod = (app) => {
+    app.use('/logout', logoutRoutes);
     app.use('/login', loginRoutes);
     app.use('/register', registerRoutes);
     app.use('/editor', editorRoutes);

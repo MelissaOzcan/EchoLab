@@ -116,7 +116,7 @@ export const joinRoom = async (id, username) => {
     await getUserByUsername(username);
 
     const updatedParticipants = {
-        $push: {participants: username}
+        $push: { participants: username }
     };
 
     const updatedRoom = await roomCollection.findOneAndUpdate(
@@ -171,3 +171,38 @@ export const getParticipants = async (id) => {
     }
     return room.participants;
 }
+
+/**
+ * @function removeParticipant
+ * @param {string} id
+ * @param {string} username
+ * @throws {NotFound} Throws Not Found if room with given ID is not found.
+ * @description Removes a participant from the room with the given ID.
+ */
+
+export const removeParticipant = async (id, username) => {
+    parameterCheck(id, username);
+    strValidCheck(id, username);
+    id = idCheck(id);
+    username = username.trim().toLowerCase();
+
+    const roomCollection = await rooms();
+    const room = await roomCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!room) {
+        throw { status: 404, message: `No room with ID: ${id}` };
+    }
+
+    const updatedParticipants = {
+        $pull: { participants: username }
+    };
+
+    const updatedRoom = await roomCollection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        updatedParticipants,
+        { returnDocument: 'after' }
+    );
+
+    return updatedRoom;
+}
+
