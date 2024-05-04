@@ -24,7 +24,7 @@ function LanguageRunner() {
             if (channel === id) {
                 setLanguage(language);
                 fetchCode(language);
-        }
+            }
         });
 
         socketRef.current.on('codeUpdate', ({ channel, code }) => {
@@ -34,7 +34,7 @@ function LanguageRunner() {
                 setEditorReady(true);
             }
         });
-    
+
         return () => {
             socketRef.current.disconnect();
         };
@@ -47,7 +47,7 @@ function LanguageRunner() {
             fetchCode(language);
         }
     }, [navigate, token, language]);
-    
+
 
     const handleLanguageChange = (newLanguage) => {
         setLanguage(newLanguage);
@@ -75,8 +75,8 @@ function LanguageRunner() {
 
     const updateCodeInDatabase = async (code) => {
         try {
-            await axios.post(`http://localhost:4000/editor/${id}`, 
-            { code, lang: language }, {
+            await axios.post(`http://localhost:4000/editor/${id}`,
+                { code, lang: language }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (err) {
@@ -92,13 +92,13 @@ function LanguageRunner() {
         e.preventDefault();
         setOutput("");
         setError("");
-    
+
         const compileUrl = `http://localhost:4000/compile/${language.toLowerCase()}`;
-    
+
         try {
             const res = await axios.post(compileUrl, { code: userCode }, {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                headers: { Authorization: `Bearer ${token}` },
+            }
             );
             setOutput(res.data.result);
         } catch (err) {
@@ -144,28 +144,29 @@ function LanguageRunner() {
                 <div className='flex'>
                     <div className='w-3/4'>
                         <form onSubmit={handleSubmit} className='e-form'>
-                        {isEditorReady && (
-                            <Editor
+                            {isEditorReady && (
+                                <Editor
                                     height="75vh"
                                     defaultLanguage={language.toLowerCase()}
                                     theme='vs-dark'
-                                value={userCode}
-                                onChange={handleEditorChange}
-                            />
-                        )}
-                        <button type="submit">Run</button>
-                    </form>
-                    <div className="output-container">
-                        OUTPUT:
-                        {output && <pre>{output}</pre>}
-                        {error && <pre>{error}</pre>}
+                                    value={userCode}
+                                    onChange={handleEditorChange}
+                                />
+                            )}
+                            <button type="submit">Run</button>
+                        </form>
+                        <div className="output-container">
+                            OUTPUT:
+                            {output && <pre>{output}</pre>}
+                            {error && <pre>{error}</pre>}
+                        </div>
+                        <button onClick={handleSignOut}>
+                            Sign Out
+                        </button>
+                        <br />
                     </div>
-                    <button onClick={handleSignOut}>
-                        Sign Out
-                    </button>
-                    <br />
+                    <Sidebar />
                 </div>
-            </div>
                 <ul>
                     <li><button type="submit">Run</button></li>
                     <li><div className="output-container">
@@ -178,7 +179,7 @@ function LanguageRunner() {
                         navigate('/login');
                     }}>Sign Out</button></li>
                 </ul>
-        </div>
+            </div>
         </>
     );
 }
