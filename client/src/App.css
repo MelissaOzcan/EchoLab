@@ -1,3 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -106,6 +112,12 @@ form{
   padding: 20px;
   border-radius: 8px; /* Rounds corners */
   margin: 20px 0; /* Adds vertical margin */
+  animation: fadein 2.3s ease-out forwards;
+}
+
+.form-container-python-runner{
+  pointer-events: auto;
+  position: relative;
   animation: fadein 2.3s ease-out forwards;
 }
 
@@ -256,17 +268,4 @@ select{
   z-index: 1;
   animation: pulsate 8s infinite ease-in-out;
 }
-
-.e-form {
-  display: flex;
-  flex-direction: column; /* Stack children vertically */
-  align-items: center; /* Center horizontally */
-  z-index: 120;
-}
-.editor-container {
-  min-height: 300px; /* Minimum height for smaller screens */
-  max-width: 100%;
-  z-index: 121;
-}
-
 

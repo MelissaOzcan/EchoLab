@@ -4,7 +4,7 @@
  */
 
 import { Router } from 'express';
-import { createRoom, getRoom } from '../data/rooms.js';
+import { createRoom, joinRoom } from '../data/rooms.js';
 import { authorizeToken } from '../middleware/jwtAuthentication.js';
 import { apiLimiter } from '../middleware/rateLimiter.js';
 import { idCheck, parameterCheck, strValidCheck } from '../utils/validate.js';
@@ -51,7 +51,7 @@ router
 
 router
     .post("/join", apiLimiter, authorizeToken, async (req, res) => {
-        let { roomId } = req.body
+        let { roomId, username } = req.body;
         try {
             parameterCheck(roomId);
             strValidCheck(roomId);
@@ -60,7 +60,7 @@ router
             return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
         }
         try {
-            const room = await getRoom(roomId);
+            const room = await joinRoom(roomId, username);
             if (!room) throw { status: 500, message: "Internal Server Error." };
             return res.status(200).json({ room });
         } catch (err) {

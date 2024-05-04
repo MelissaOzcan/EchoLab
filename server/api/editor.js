@@ -5,7 +5,7 @@
  */
 
 import { Router } from "express";
-import { getRoom, updateRoom } from "../data/rooms.js";
+import { getRoom, updateRoom, getParticipants } from "../data/rooms.js";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 import { idCheck, parameterCheck, strValidCheck } from "../utils/validate.js";
@@ -45,6 +45,25 @@ router
             const room = await updateRoom(id, lang, code);
 
             return res.status(200).json({ room: room });
+        } catch (err) {
+            console.log(err);
+            return res.status(400).json({ "error": `'${lang}' is not available.` });
+        }
+    });
+
+router
+    .get("/participants/:roomId", apiLimiter, authorizeToken, async (req, res) => {
+        let { roomId } = req.params;
+        try {
+            parameterCheck(roomId);
+            strValidCheck(roomId);
+            roomId = idCheck(roomId);
+        } catch (err) {
+            return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
+        }
+        try {
+            const participants = await getParticipants(roomId);
+            return res.status(200).json({ participants: participants });
         } catch (err) {
             console.log(err);
             return res.status(400).json({ "error": `'${lang}' is not available.` });

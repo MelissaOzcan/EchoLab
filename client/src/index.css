@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+}
+
+@layer components {
+  /* .btn {
+    @apply px-4 py-2 bg-purple-500 text-white rounded;
+  } */
+
+  /* button {
+    @apply px-4 py-2 bg-purple-500 text-white rounded ;
+  } */
+
+  h1, h2, h3, h4, h5, p, a, input, button, label, span, div {
+    @apply font-body text-black dark:text-white text-center;
+}
+}
+
+
+
+
+
