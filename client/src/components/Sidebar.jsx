@@ -8,16 +8,11 @@ import "../index.css";
 function Sidebar() {
     let [participants, setParticipants] = React.useState([]);
     const room = localStorage.getItem("room-ID");
+    const user = localStorage.getItem("username");
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(false);
-    //leave room function
-    const leaveRoom = () => {
-        localStorage.removeItem("room-id");
-        navigate("/login");
-    };
+    const [showToast, setShowToast] = useState(false);    
     const token = localStorage.getItem("token");
 
-    
     useEffect(() => {
         const fetchParticipants = async () => {
             try {
@@ -41,6 +36,27 @@ function Sidebar() {
             console.error('Failed to copy room ID');
         });
     };
+
+    const handleLeaveRoom = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(
+                `http://localhost:4000/logout`,
+                {
+                    roomId: room,
+                    username: user
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+            console.log("room=")
+            localStorage.removeItem("room-id");
+            navigate("/login");
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred");
+        }
+    }
 
     return (
         <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
@@ -74,7 +90,7 @@ function Sidebar() {
             </div>
             <hr className="border-white-700" />
             <div className="mt-4">
-                <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={leaveRoom}>
+                <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleLeaveRoom}>
                     Leave Room
                 </button>
             </div>
