@@ -167,18 +167,6 @@ function LanguageRunner() {
                     </div>
                     <Sidebar />
                 </div>
-                <ul>
-                    <li><button type="submit">Run</button></li>
-                    <li><div className="output-container">
-                        OUTPUT:
-                        {output && (<pre>{output}</pre>)}
-                        {error && (<pre>{error}</pre>)}
-                    </div></li>
-                    <li><button onClick={() => {
-                        localStorage.removeItem('token');
-                        navigate('/login');
-                    }}>Sign Out</button></li>
-                </ul>
             </div>
         </>
     );
