@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import Sidebar from "./Sidebar";
 
 function LanguageRunner() {
     const [language, setLanguage] = useState('python');
@@ -105,47 +106,52 @@ function LanguageRunner() {
 
     return (
         <>
-        <div className='background-static'>
+            <div className='background-static'>
             </div>
             <div className='editor-container'>
-                    <h2>{language.toUpperCase()} Editor</h2>
-                    <div>
-                        <select value={language} onChange={e => handleLanguageChange(e.target.value)} className="mb-4">
-                            <option value="python">Python</option>
-                            <option value="java">Java</option>
-                            <option value="node">Node.js</option>
-                            <option value="cpp">C++</option>
-                            <option value="rust">Rust</option>
-                        </select>
+                <h2>{language.toUpperCase()} Editor</h2>
+                <div>
+                    <select value={language} onChange={e => handleLanguageChange(e.target.value)} className="mb-4">
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="node">Node.js</option>
+                        <option value="cpp">C++</option>
+                        <option value="rust">Rust</option>
+                    </select>
+                </div>
+                <div className='flex'>
+                    <div className='w-3/4'>
+                        <form onSubmit={handleSubmit} className='e-form'>
+                            {isEditorReady && (
+                                <Editor
+                                    height="75vh"
+                                    defaultLanguage={language.toLowerCase()}
+                                    theme='vs-dark'
+                                    value={userCode}
+                                    onChange={handleEditorChange}
+                                />
+                            )}
+                        </form>
                     </div>
-                    <form onSubmit={handleSubmit} className='e-form'>
-                        {isEditorReady && (
-                            <Editor
-                                height="65vh"
-                                defaultLanguage={language.toLowerCase()}
-                                theme='vs-dark'
-                                value={userCode}
-                                onChange={handleEditorChange}
-                            />
-                        )}
-                    </form>
+                    <div className='w-1/4'>
+                        <Sidebar />
+                    </div>
+                </div>
                 <ul>
-                <li><button type="submit">Run</button></li>
-                <li><div className="output-container">
-                    OUTPUT:
-                    {output && (<pre>{output}</pre>)}
-                    {error && (<pre>{error}</pre>)}
-                </div></li>
-                <li><button onClick={() => {
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                }}>Sign Out</button>
-                <br />
-                </li>
-            </ul>
-        </div>
+                    <li><button type="submit">Run</button></li>
+                    <li><div className="output-container">
+                        OUTPUT:
+                        {output && (<pre>{output}</pre>)}
+                        {error && (<pre>{error}</pre>)}
+                    </div></li>
+                    <li><button onClick={() => {
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                    }}>Sign Out</button></li>
+                </ul>
+            </div>
         </>
     );
-}
+}    
 
 export default LanguageRunner;

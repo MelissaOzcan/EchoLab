@@ -1,9 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -16,6 +10,7 @@
 body{
   background: black;
 }
+
 
 form{
   display: flex;
@@ -108,29 +103,23 @@ form{
 .form-container{
   pointer-events: auto;
   position: relative;
-  width: 300px; /* Fixed width */
+  width: 300px; 
   padding: 20px;
-  border-radius: 8px; /* Rounds corners */
-  margin: 20px 0; /* Adds vertical margin */
-  animation: fadein 2.3s ease-out forwards;
-}
-
-.form-container-python-runner{
-  pointer-events: auto;
-  position: relative;
+  border-radius: 8px; 
+  margin: 20px 0; 
   animation: fadein 2.3s ease-out forwards;
 }
 
 .form-container-2{
   pointer-events: auto;
   position: absolute;
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Adjust position to the exact center */
-  width: 300px; /* Fixed width */
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  width: 300px; 
   padding: 20px;
-  border-radius: 8px; /* Rounds corners */
-  margin: 20px 0; /* Adds vertical margin */
+  border-radius: 8px; 
+  margin: 20px 0; 
   z-index: 2;
   animation: fadein 2.3s ease-out forwards;
 }
@@ -225,10 +214,10 @@ select{
 
 .App-header {
   width: 100%;
-  height: 30%; /* Adjusted to auto to accommodate the logo's height */
+  height: 30%; 
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center; 
+  align-items: center; 
   padding-top: 5%;
 }
 
@@ -255,17 +244,32 @@ select{
 
 .App-logo {
   pointer-events: none;
-  height: 500px; /* Maintains the aspect ratio */
-  width: 500px; /* Adjust according to the size you want for your logo */
-  z-index: 1;
+  height: 500px; 
+  width: 500px; 
   animation: pulsate 8s infinite ease-in-out, fadein 5s ease-out forwards;
 }
 
 .App-logo-2 {
   pointer-events: none;
-  height: 500px; /* Maintains the aspect ratio */
-  width: 500px; /* Adjust according to the size you want for your logo */
+  height: 500px; 
+  width: 500px; 
   z-index: 1;
   animation: pulsate 8s infinite ease-in-out;
+}
+
+.e-form {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  z-index: 120;
+}
+.editor-container {
+  min-height: 300px;
+  max-width: 100%;
+  z-index: 121;
+}
+
+.navbar-editor{
+  align-items: center;
 }
 
