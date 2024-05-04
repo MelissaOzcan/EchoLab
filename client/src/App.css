@@ -80,6 +80,7 @@ form{
   justify-content: flex-start;
   background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
   overflow: hidden;
+  z-index: -1;
 }
 
 .background-static-home {
@@ -201,6 +202,15 @@ button:hover{
   transition: transform 0.1s ease-in-out;
 }
 
+select{
+  border-radius: 8px;
+  padding: 8px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  font-size:15px;
+}
+
 .App-header {
   width: 100%;
   height: 30%; /* Adjusted to auto to accommodate the logo's height */
@@ -246,4 +256,17 @@ button:hover{
   z-index: 1;
   animation: pulsate 8s infinite ease-in-out;
 }
+
+.e-form {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center horizontally */
+  z-index: 120;
+}
+.editor-container {
+  min-height: 300px; /* Minimum height for smaller screens */
+  max-width: 100%;
+  z-index: 121;
+}
+
 

@@ -70,15 +70,15 @@ function Home() {
                <img src={Echo} className="App-logo" alt="logo" />
              </div>
             <div className='form-container'>
-            <h2>Welcome, {username}</h2>
+            <ul>
+            <h2>Welcome, {username}!</h2>
             <form onSubmit={handleSubmitJoin}>
-                Room ID: 
+                <li>Room ID:
                 <br />
-                <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} /> 
+                <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} /> </li>
                 <br />
                 <button type="submit">Join Room</button>
             </form>
-            <ul>
             <li>
             <button onClick={() => {
                 localStorage.removeItem('token');
