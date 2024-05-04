@@ -122,7 +122,6 @@ function LanguageRunner() {
                         {isEditorReady && (
                             <Editor
                                 height="65vh"
-                                width="120vh"
                                 defaultLanguage={language.toLowerCase()}
                                 theme='vs-dark'
                                 value={userCode}
