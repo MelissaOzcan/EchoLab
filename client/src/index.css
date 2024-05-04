@@ -61,3 +61,8 @@ select{
   background-color: #d8d8d8;
   color: black;
 }
+
+.editor{
+    height: 100vh;
+    overflow-y: auto;
+}

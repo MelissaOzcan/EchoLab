@@ -102,54 +102,58 @@ function LanguageRunner() {
         }
     };
     
-    
 
     return (
         <>
-            <div className='background-static'>
-            </div>
-            <div className='editor-container'>
-                <h2>{language.toUpperCase()} Editor</h2>
-                <div>
-                    <select value={language} onChange={e => handleLanguageChange(e.target.value)} className="mb-4">
-                        <option value="python">Python</option>
-                        <option value="java">Java</option>
-                        <option value="node">Node.js</option>
-                        <option value="cpp">C++</option>
-                        <option value="rust">Rust</option>
-                    </select>
-                </div>
-                <div className='flex'>
-                    <div className='w-3/4'>
-                        <form onSubmit={handleSubmit} className='e-form'>
-                            {isEditorReady && (
-                                <Editor
-                                    height="75vh"
-                                    defaultLanguage={language.toLowerCase()}
-                                    theme='vs-dark'
-                                    value={userCode}
-                                    onChange={handleEditorChange}
-                                />
-                            )}
-                        </form>
+        <div className="editor">
+        <div className='background-static'></div>
+        <div className="min-h-screen flex flex-col">
+            <div className="flex-grow overflow-y-auto">
+                <div className="editor-container">
+                    <h2>{language.toUpperCase()} Editor</h2>
+                    <div>
+                        <select value={language} onChange={e => handleLanguageChange(e.target.value)} className="mb-4">
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="node">Node.js</option>
+                            <option value="cpp">C++</option>
+                            <option value="rust">Rust</option>
+                        </select>
                     </div>
-                    <div className='w-1/4'>
-                        <Sidebar />
+                    <div className='flex'>
+                        <div className='w-3/4 flex flex-col items-center'>
+                            <form onSubmit={handleSubmit} className='e-form w-full'>
+                                {isEditorReady && (
+                                    <Editor
+                                        height="75vh"
+                                        language={language.toLowerCase()}
+                                        theme='vs-dark'
+                                        value={userCode}
+                                        onChange={handleEditorChange}
+                                    />
+                                )}
+                                <div className='flex flex-col items-center w-full'>
+                                    <button type="submit" className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Run</button>
+                                    <div className="output-container mt-4 w-full max-h-50 overflow-y-auto"> 
+                                        <div className="text-sm -600 mb-2">OUTPUT:</div>
+                                        {output && (
+                                            <pre className="bg-gray-200 rounded p-3 whitespace-pre-wrap break-words">{output}</pre>
+                                        )}
+                                        {error && (
+                                            <pre className="bg-red-200 text-red-800 rounded p-3 whitespace-pre-wrap break-words">{error}</pre>
+                                        )}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div className='w-1/4'>
+                            <Sidebar />
+                        </div>
                     </div>
                 </div>
-                <ul>
-                    <li><button type="submit">Run</button></li>
-                    <li><div className="output-container">
-                        OUTPUT:
-                        {output && (<pre>{output}</pre>)}
-                        {error && (<pre>{error}</pre>)}
-                    </div></li>
-                    <li><button onClick={() => {
-                        localStorage.removeItem('token');
-                        navigate('/login');
-                    }}>Sign Out</button></li>
-                </ul>
             </div>
+        </div>
+        </div>
         </>
     );
 }    
