@@ -72,7 +72,7 @@ function Login() {
         </div>
       </div>
       <div className="form-container-2">
-        <h2>Login</h2>
+        <h1>Login</h1>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <input

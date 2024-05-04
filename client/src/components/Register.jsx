@@ -61,10 +61,10 @@ function Register() {
     return (
         <div className='background-static'>
             <div className="App-header">
-               <img src={Echo} className="App-logo-2" alt="logo" />
+               <img src={Echo} className="App-logo" alt="logo" />
              </div>
             <div className='form-container'>
-            <h2>Register</h2>
+            <h1>Register</h1>
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                 <form onSubmit={handleSubmit}>
                 <input

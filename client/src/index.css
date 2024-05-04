@@ -3,24 +3,61 @@
 @tailwind utilities;
 
 
-@layer base {
+input{
+  border-radius: 8px;
+  padding: 10px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  font-size:20px;
+  color: black;
 }
 
-@layer components {
-  /* .btn {
-    @apply px-4 py-2 bg-purple-500 text-white rounded;
-  } */
-
-  /* button {
-    @apply px-4 py-2 bg-purple-500 text-white rounded ;
-  } */
-
-  h1, h2, h3, h4, h5, p, a, input, button, label, span, div {
-    @apply font-body text-black dark:text-white text-center;
-}
+input:focus{
+  background-color: #f6f6f6;
+  transform: scale(1.05);
 }
 
+input:hover{
+  background-color: #f6f6f6;
+  transform: scale(1.05);
+  transition: transform 0.09s ease-in-out;
+}
 
+button{
+  border-radius: 8px;
+  padding: 8px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  text-align: center;
+  font-size:15px;
+  color: black;
+}
 
+button:hover{
+  background-color: #f6f6f6;
+  transform: scale(1.10);
+  transition: transform 0.1s ease-in-out;
+}
 
+h1{
+  font-family: "Exo 2", sans-serif;
+  font-size: 25px;
+}
 
+h2{
+  font-family: "Exo 2", sans-serif;
+  font-size: 20px;
+}
+
+select{
+  border-radius: 8px;
+  padding: 8px;
+  border-style: hidden;
+  background-color: #d8d8d8;
+  font-family: "Exo 2", sans-serif;
+  font-size:15px;
+  background-color: #d8d8d8;
+  color: black;
+}

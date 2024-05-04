@@ -14,6 +14,7 @@ export default {
         midGrey: "#282828",
         deepPurple: "#230046",
         midPurple: "#320064",
+        defaultBg: "#d8d8d8",
 
       },
       fontFamily: {

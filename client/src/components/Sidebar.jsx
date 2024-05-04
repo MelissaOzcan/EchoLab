@@ -9,6 +9,7 @@ function Sidebar() {
     let [participants, setParticipants] = React.useState([]);
     const room = localStorage.getItem("room-ID");
     const navigate = useNavigate();
+    const [showToast, setShowToast] = useState(false);
     //leave room function
     const leaveRoom = () => {
         localStorage.removeItem("room-id");
@@ -32,13 +33,34 @@ function Sidebar() {
         fetchParticipants();
     }, [room]);
 
+    const copyRoomIdToClipboard = () => {
+        navigator.clipboard.writeText(room).then(() => {
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000); // hide toast after 3 seconds
+        }, () => {
+            console.error('Failed to copy room ID');
+        });
+    };
+
     return (
         <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
             <div className="my-2 mb-4">
                 <h1 className="text-2xl">EchoLab</h1>
-                <h2 className="text-gray-400">Room: {room}</h2>
+                <h3 className="text-gray-400">Room:
+                <button onClick={copyRoomIdToClipboard} className="text-sm text-black py-1 px-3 rounded mt-2">
+                    Copy Room ID
+                </button> 
+                {room}</h3>
+                {showToast && (
+                    <div className="fixed inset-0 flex items-center justify-center">
+                        <div className="bg-green-500 text-white px-4 py-2 rounded">
+                            Room ID Copied!
+                        </div>
+                    </div>
+                )}
+                <br />
                 <div>
-                    <h2 className="text-gray-400">Participants</h2>
+                    <h3 className="text-gray-400">Participants</h3>
                     <ul>
                         {participants.map((participant, index) => (
                             <li key={index}>{participant}</li>

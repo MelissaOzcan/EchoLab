@@ -13,7 +13,7 @@ import './App.css';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
-import PythonRunner from './components/PythonRunner';
+import LanguageRunner from './components/LanguageRunner';
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/editor/:id" element={<Navigate replace to="/editor/:id/python" />} />
-          <Route path="/editor/:id/python" element={<PythonRunner />} />
+          <Route path="/editor/:id/python" element={<LanguageRunner />} />
           <Route path="*" element={<Navigate replace to={"/login"} />} />
         </Routes>
       </div>
