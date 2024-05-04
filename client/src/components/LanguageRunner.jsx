@@ -1,33 +1,35 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Editor from '@monaco-editor/react';
-import axios from 'axios';
-import io from 'socket.io-client';
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Editor from "@monaco-editor/react";
+import axios from "axios";
+import io from "socket.io-client";
 import Sidebar from "./Sidebar";
 
 function LanguageRunner() {
     const [language, setLanguage] = useState('python');
     const [userCode, setCode] = useState('');
     const [isEditorReady, setEditorReady] = useState(false);
-    const [output, setOutput] = useState('');
-    const [error, setError] = useState('');
+    const [output, setOutput] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const id = localStorage.getItem('room-ID');
-    const token = localStorage.getItem('token');
+    const id = localStorage.getItem("room-ID");
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("username");
     const socketRef = useRef();
 
     useEffect(() => {
         socketRef.current = io('http://localhost:4000');
-        
+
         socketRef.current.on('languageChange', ({ channel, language }) => {
             if (channel === id) {
                 setLanguage(language);
                 fetchCode(language);
-            }
+        }
         });
-    
+
         socketRef.current.on('codeUpdate', ({ channel, code }) => {
             if (channel === id) {
+                console.log(`Received code update for room ${channel}: ${code}`);
                 setCode(code);
                 setEditorReady(true);
             }
@@ -36,7 +38,7 @@ function LanguageRunner() {
         return () => {
             socketRef.current.disconnect();
         };
-    }, [id]);    
+    }, [id]);
 
     useEffect(() => {
         if (!token) {
@@ -82,8 +84,9 @@ function LanguageRunner() {
             if (err.response && err.response.status === 401) {
                 navigate('/login');
             }
+            console.log(err);
         }
-    };   
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -94,15 +97,34 @@ function LanguageRunner() {
     
         try {
             const res = await axios.post(compileUrl, { code: userCode }, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             setOutput(res.data.result);
         } catch (err) {
             setError(err.response?.data?.error || "An error occurred");
         }
     };
-    
-    
+
+    const handleSignOut = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(
+                `http://localhost:4000/logout`,
+                {
+                    roomId: id,
+                    username: user
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+            localStorage.removeItem("token");
+            navigate("/login");
+        } catch (e) {
+            setError(err.response?.data?.error || "An error occurred");
+        }
+    }
 
     return (
         <>
@@ -122,21 +144,28 @@ function LanguageRunner() {
                 <div className='flex'>
                     <div className='w-3/4'>
                         <form onSubmit={handleSubmit} className='e-form'>
-                            {isEditorReady && (
-                                <Editor
+                        {isEditorReady && (
+                            <Editor
                                     height="75vh"
                                     defaultLanguage={language.toLowerCase()}
                                     theme='vs-dark'
-                                    value={userCode}
-                                    onChange={handleEditorChange}
-                                />
-                            )}
-                        </form>
+                                value={userCode}
+                                onChange={handleEditorChange}
+                            />
+                        )}
+                        <button type="submit">Run</button>
+                    </form>
+                    <div className="output-container">
+                        OUTPUT:
+                        {output && <pre>{output}</pre>}
+                        {error && <pre>{error}</pre>}
                     </div>
-                    <div className='w-1/4'>
-                        <Sidebar />
-                    </div>
+                    <button onClick={handleSignOut}>
+                        Sign Out
+                    </button>
+                    <br />
                 </div>
+            </div>
                 <ul>
                     <li><button type="submit">Run</button></li>
                     <li><div className="output-container">
@@ -149,9 +178,9 @@ function LanguageRunner() {
                         navigate('/login');
                     }}>Sign Out</button></li>
                 </ul>
-            </div>
+        </div>
         </>
     );
-}    
+}
 
 export default LanguageRunner;
