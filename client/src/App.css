@@ -80,7 +80,6 @@ form{
   justify-content: space-evenly;
   justify-content: flex-start;
   background: linear-gradient(to top, #00609463 0%, #0096c7 100%);
-  overflow: hidden;
   z-index: -1;
 }
 
@@ -261,15 +260,15 @@ select{
   display: flex;
   flex-direction: column; 
   align-items: center; 
-  z-index: 120;
 }
 .editor-container {
   min-height: 300px;
   max-width: 100%;
-  z-index: 121;
 }
 
 .navbar-editor{
   align-items: center;
 }
+
+
 

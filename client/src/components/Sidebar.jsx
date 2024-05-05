@@ -68,7 +68,7 @@ function Sidebar() {
                 </button> 
                 {room}</h3>
                 {showToast && (
-                    <div className="fixed inset-0 flex items-center justify-center">
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-green-500 text-white px-4 py-2 rounded">
                             Room ID Copied!
                         </div>
@@ -84,11 +84,11 @@ function Sidebar() {
                     </ul>
                 </div>
             </div>
-            <hr className="border-gray-700" />
+            <hr className="border-white-700" />
             <div>
                 <VoiceChannel />
             </div>
-            <hr className="border-gray-700" />
+            <hr className="border-white-700" />
             <div className="mt-4">
                 <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleLeaveRoom}>
                     Leave Room
