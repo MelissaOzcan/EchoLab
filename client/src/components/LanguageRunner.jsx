@@ -16,6 +16,7 @@ function LanguageRunner() {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("username");
     const socketRef = useRef();
+    console.log("room id:", id);
 
     useEffect(() => {
         socketRef.current = io('http://localhost:4000');
