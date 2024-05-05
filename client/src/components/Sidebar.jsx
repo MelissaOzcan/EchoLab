@@ -55,7 +55,7 @@ function Sidebar() {
     const copyRoomIdToClipboard = () => {
         navigator.clipboard.writeText(room).then(() => {
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000); // hide toast after 3 seconds
+            setTimeout(() => setShowToast(false), 800); // hide toast after 3 seconds
         }, () => {
             console.error('Failed to copy room ID');
         });
@@ -119,6 +119,15 @@ function Sidebar() {
                     Leave Room
                 </button>
             </div>
+            {/* 
+            <button onClick={(e) => {
+                handleLeaveRoom(e);
+                localStorage.removeItem('token');
+                navigate('/login');
+            }} className="mt-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">
+                Sign Out
+            </button>
+            */}
         </div>
     );
 }

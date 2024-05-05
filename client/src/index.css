@@ -63,6 +63,11 @@ select{
 }
 
 .editor{
-    height: 100vh;
+    height: 95vh;
     overflow-y: auto;
+    width: auto;
+}
+
+p {
+  font-size: 15px;
 }
