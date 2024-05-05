@@ -1,6 +1,9 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import pkg from 'agora-access-token';
 const { RtcTokenBuilder, RtmRole } = pkg;
+
+dotenv.config();
 
 const PORT = 8080;
 
@@ -50,7 +53,7 @@ const generateAccessToken = (req, resp) => {
     // build the token
     const token = RtcTokenBuilder.buildTokenWithUid(`${process.env.APP_ID}`, `${process.env.APP_CERTIFICATE}`, channelName, uid, role, privilegeExpireTime);
     // return the token
-    return resp.json({ 'token': token });
+    return resp.json({ 'token': token , 'uid': uid, 'channelName': channelName, 'appID': `${process.env.APP_ID}`, 'certificate': `${process.env.APP_CERTIFICATE}`});
 
 };
 
