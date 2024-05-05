@@ -5,12 +5,12 @@
  */
 
 import { Router } from "express";
+import redis from 'redis';
+import { redisConfig } from "../config/redisSettings.js";
 import { authorizeToken } from "../middleware/jwtAuthentication.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 import { runCodeInDocker } from "../utils/helpers.js";
-import { redisConfig } from "../config/redisSettings.js";
-import redis from 'redis';
-import crypto from 'crypto';
+import crypto from "crypto";
 
 const client = redis.createClient(redisConfig);
 client.connect().then(() => {});
@@ -29,7 +29,7 @@ router
         }
 
         const hash = crypto.createHash('sha256').update(code + language).digest('hex');
-
+        
         try {
             let output;
             const cachedOutput = await client.get(hash);
@@ -40,7 +40,6 @@ router
                 output = await runCodeInDocker(language, code);
                 await client.set(hash, output);
             }
-            
 
             res.status(200).json({ result: output });
         } catch (err) {

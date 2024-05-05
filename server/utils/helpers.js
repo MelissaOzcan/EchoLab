@@ -70,7 +70,7 @@ export const runCodeInDocker = async (language, code) => {
         console.error('Error: ', error);
         throw error;
     } finally {
-        const deleteCommand = `ssh -i ${sshKeyPath} ubuntu@18.219.85.188 'rm -f ${remoteFilePath}'`;
+        const deleteCommand = `ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} ubuntu@18.219.85.188 'rm -f ${remoteFilePath}'`;
         await executeCommand(deleteCommand);
         fs.unlinkSync(localFilePath);
     }

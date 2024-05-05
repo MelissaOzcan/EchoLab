@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Editor from "@monaco-editor/react";
 import axios from "axios";
 import io from "socket.io-client";
+import Editor from "@monaco-editor/react";
 import Sidebar from "./Sidebar";
 
 function LanguageRunner() {
@@ -122,7 +122,7 @@ function LanguageRunner() {
             localStorage.removeItem("token");
             navigate("/login");
         } catch (e) {
-            setError(err.response?.data?.error || "An error occurred");
+            setError(e.response?.data?.error || "An error occurred");
         }
     }
 
