@@ -17,7 +17,7 @@ function Sidebar() {
 
     useEffect(() => {
         socketRef.current = io('http://localhost:4000');
-
+        handleParticipantsChange(participants)
         socketRef.current.on('updateParticipants', ({ channel, participants }) => {
             if (channel === room) {
                 setParticipants(participants);
@@ -105,7 +105,7 @@ function Sidebar() {
                     <ul>
                         {participants.map((participant, index) => (
                             <li key={index}>{participant}</li>
-                        ))}
+                        ))} 
                     </ul>
                 </div>
             </div>
