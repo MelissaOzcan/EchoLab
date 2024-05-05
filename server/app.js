@@ -42,6 +42,10 @@ io.on('connection', (socket) => {
         io.emit('codeUpdate', {channel, code});
     });
 
+    socket.on('updateParticipants', ({ channel, participants }) => {
+        io.emit('updateParticipants', {channel, participants});
+    });
+
     socket.on('disconnect', () => {
         console.log(`User disconnected: ${socket.id}`);
     });

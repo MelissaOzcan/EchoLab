@@ -1,32 +1,56 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VoiceChannel from "./VoiceChannel";
+import io from "socket.io-client";
 import "../index.css";
 
 function Sidebar() {
-    let [participants, setParticipants] = React.useState([]);
+    const [participants, setParticipants] = React.useState([]);
     const room = localStorage.getItem("room-ID");
     const user = localStorage.getItem("username");
     const navigate = useNavigate();
     const [showToast, setShowToast] = useState(false);    
     const token = localStorage.getItem("token");
+    const socketRef = useRef();
 
     useEffect(() => {
-        const fetchParticipants = async () => {
-            try {
-                const response = await axios.get(`http://localhost:4000/editor/participants/${room}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                setParticipants(response.data.participants);
-            } catch (error) {
-                console.error('Error fetching participants:', error);
+        socketRef.current = io('http://localhost:4000');
+
+        socketRef.current.on('updateParticipants', ({ channel, participants }) => {
+            if (channel === room) {
+                setParticipants(participants);
+                fetchParticipants();
             }
+        });
+
+        return () => {
+            socketRef.current.disconnect();
         };
+    }, [room]);
+
+    useEffect(() => {
 
         fetchParticipants();
     }, [room]);
+
+    const fetchParticipants = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/editor/participants/${room}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setParticipants(response.data.participants);
+        } catch (error) {
+            console.error('Error fetching participants:', error);
+        }
+    }
+
+    const handleParticipantsChange = (newParticipants)=> {
+        setParticipants(newParticipants);
+        socketRef.current.emit('updateParticipants', { channel: room, participants: newParticipants });
+        fetchParticipants();
+    };
 
     const copyRoomIdToClipboard = () => {
         navigator.clipboard.writeText(room).then(() => {
@@ -53,6 +77,7 @@ function Sidebar() {
             console.log("room=")
             localStorage.removeItem("room-id");
             navigate("/login");
+            handleParticipantsChange(participants);
         } catch (err) {
             console.log(err.response?.data?.error || "An error occurred");
         }
