@@ -6,7 +6,7 @@ import { VideoPlayer } from "./VideoPlayer";
 // 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
 
 const appId = "eadb6e134cf641d183125d8746725119";
-const token = "007eJxTYMg3kXBmzG//m318fc1bx1YB5ger5tzQqTv91qj91xXuzoUKDKmJKUlmqYbGJslpZiaGKYYWxoZGpikW5iZm5kamhoaWwUrmaQ2BjAwpZyIZGKEQxGdhKEktLmFgAAA9ch6q";
+const token = "007eJxTYNhee8Xp1IOfhVP1jv/k+OnndC9u5vpDTTNU4uUP+uzU+RajwJCamJJklmpobJKcZmZimGJoYWxoZJpiYW5iZm5kamho6aFtntYQyMiwyNCSgREKQXwWhpLU4hIGBgDZ3B+y";
 let channel = "test";
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -36,9 +36,11 @@ export const VideoRoom = () => {
   };
 
   useEffect(() => {
-    channel = room;
+    //channel = room;
     client.on("user-published", handleUserJoined);
     client.on("user-left", handleUserLeft);
+    console.log("channel", channel);
+    console.log("token", token);
 
     client
       .join(appId, channel, token, null)
