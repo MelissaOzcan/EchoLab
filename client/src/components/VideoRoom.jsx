@@ -6,13 +6,15 @@ import { VideoPlayer } from "./VideoPlayer";
 const appId = "8292d68d0c33475489ac94f69ebe8f73";
 const token =
   "007eJxTYFhbX7DtZqVuofI3gT0v20JuPf48x3iyjn2Oa8vlFUedk5oUGCyMLI1SzCxSDJKNjU3MTU0sLBOTLU3SzCxTk1It0syNV7mZpTUEMjKsdJvBzMgAgSA+C0NJanEJAwMAqasgSQ==";
-const channel = "test";
+let channel = "test";
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 export const VideoRoom = () => {
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
+  const room = localStorage.getItem("room-ID");
+  console.log("room id from video room:", room);
   const handleUserJoined = async (user, mediaType) => {
     console.log("*********************************user joined", user);
     await client.subscribe(user, mediaType);
@@ -33,6 +35,7 @@ export const VideoRoom = () => {
   };
 
   useEffect(() => {
+    channel = room;
     client.on("user-published", handleUserJoined);
     client.on("user-left", handleUserLeft);
 
