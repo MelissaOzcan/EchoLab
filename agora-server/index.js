@@ -1,5 +1,6 @@
 import express from 'express';
-import { RtcTokenBuilder, RtmRole } from 'agora-access-token';
+import pkg from 'agora-access-token';
+const { RtcTokenBuilder, RtmRole } = pkg;
 
 const PORT = 8080;
 
@@ -20,6 +21,9 @@ const generateAccessToken = (req, resp) => {
     resp.header('Access-Control-Allow-Origin', '*'); 
     // get channel name
     const channelName = req.query.channelName;
+    console.log(channelName);
+    //print channel name type
+    console.log(typeof channelName);
     if (!channelName) {
         return resp.status(500).json({ 'error': 'channel is required' });
     }
@@ -44,7 +48,7 @@ const generateAccessToken = (req, resp) => {
     const currentTime = Math.floor(Date.now() / 1000);
     const privilegeExpireTime = currentTime + expireTime;
     // build the token
-    const token = RtcTokenBuilder.buildTokenWithUid(APP_ID, APP_CERTIFICATE, channelName, uid, role, privilegeExpireTime);
+    const token = RtcTokenBuilder.buildTokenWithUid(`${process.env.APP_ID}`, `${process.env.APP_CERTIFICATE}`, channelName, uid, role, privilegeExpireTime);
     // return the token
     return resp.json({ 'token': token });
 
@@ -53,5 +57,7 @@ const generateAccessToken = (req, resp) => {
 app.get('/access_token', nocache, generateAccessToken);
 
 app.listen(PORT, () => {
+    console.log(`APP_ID: ${APP_ID}`)
+    console.log(`APP_CERTIFICATE: ${APP_CERTIFICATE}`)
     console.log(`Server running on port ${PORT}`);
 });
