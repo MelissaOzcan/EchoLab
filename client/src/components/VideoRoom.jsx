@@ -3,16 +3,22 @@ import AgoraRTC from "agora-rtc-sdk-ng";
 import { useEffect, useState } from "react";
 import { VideoPlayer } from "./VideoPlayer";
 
+// 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
+
 const appId = "eadb6e134cf641d183125d8746725119";
-const token =
-  "007eJxTYAjrdHf+U9saHXhP+E2OyuXKyM9lEQYVLRIiqUZBOp2/XBUYUhNTksxSDY1NktPMTAxTDC2MDY1MUyzMTczMjUwNDS2vfjZOawhkZLhveomFkQECQXwWhpLU4hIGBgDk9B5E";
-const channel = "test";
+//const token = "006eadb6e134cf641d183125d8746725119IADwIOgAYd/pBQSpvsE28kVvy+Qj9xX+BRBdfB107xff/QSqNa4AAAAAEADOFL8AMUQ5ZgEAAQDBADhm";
+//let channel = "sabah1250";
+let token = "";
+let channel = "";
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 export const VideoRoom = () => {
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
+  const room = localStorage.getItem("room-ID");
+  console.log("room id from video room:", room);
+
   const handleUserJoined = async (user, mediaType) => {
     console.log("*********************************user joined", user);
     await client.subscribe(user, mediaType);
@@ -33,20 +39,49 @@ export const VideoRoom = () => {
   };
 
   useEffect(() => {
-    client.on("user-published", handleUserJoined);
-    client.on("user-left", handleUserLeft);
+    // get the channel token, and client
+    const fetchTokenJoinChannel = async () => {
+      try {
+        channel = room;
+        const response = await fetch(
+          `http://localhost:8080/access_token?channelName=${channel}&role=audience`
+        );
+        const data = await response.json();
+        console.log("data", data);
+        token = data.token;
+        channel = data.channelName;
+        console.log("token", token);
+        console.log("channel", channel);
 
-    client
-      .join(appId, channel, token, null)
-      .then(
-        (uid) => Promise.all([AgoraRTC.createMicrophoneAndCameraTracks(), uid]) //promise chaining can probs turn this into async/await syntax
-      )
-      .then(([tracks, uid]) => {
-        const [audioTrack, videoTrack] = tracks;
-        setLocalTracks(tracks);
-        setUsers((users) => [...users, { uid, videoTrack, audioTrack }]);
-        client.publish(tracks);
-      });
+        if (token && channel) {
+          client.on("user-published", handleUserJoined);
+          client.on("user-left", handleUserLeft);
+
+          //join room here
+          client
+            .join(appId, channel, token, null)
+            .then(
+              (uid) =>
+                Promise.all([AgoraRTC.createMicrophoneAndCameraTracks(), uid]) //promise chaining can probs turn this into async/await syntax
+            )
+            .then(([tracks, uid]) => {
+              const [audioTrack, videoTrack] = tracks;
+              setLocalTracks(tracks);
+              setUsers((users) => [...users, { uid, videoTrack, audioTrack }]);
+              client.publish(tracks);
+            });
+        } else {
+          console.error("token or channel not found");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // const {token, channel} = await fetchToken();
+    // console.log("channel", channel);
+    // console.log("token", token);
+    fetchTokenJoinChannel();
+    //channel = room;
 
     return () => {
       for (let localTrack of localTracks) {
