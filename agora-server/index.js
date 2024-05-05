@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import pkg from 'agora-access-token';
-const { RtcTokenBuilder, RtmRole } = pkg;
+const { RtcTokenBuilder, RtmRole, RtcRole } = pkg;
 
 dotenv.config();
 
@@ -36,10 +36,15 @@ const generateAccessToken = (req, resp) => {
         uid = 0;
     }
     // get role
-    let role = RtmRole.Rtm_User;
-    if (req.query.role == 'publisher') {
-        role = RtmRole.PUBLISHER;
-    }
+    let role;
+    console.log(req.query.role);
+    if (req.query.role === 'publisher') {
+        role = RtcRole.PUBLISHER;
+      } else if (req.query.role === 'audience') {
+        role = RtcRole.SUBSCRIBER
+      } else {
+        return resp.status(400).json({ 'error': 'role is incorrect' });
+      }
     // get the expire time
     let expireTime = req.query.expireTime;
     if (!expireTime || expireTime == '') {
@@ -53,9 +58,10 @@ const generateAccessToken = (req, resp) => {
     // build the token
     const token = RtcTokenBuilder.buildTokenWithUid(`${process.env.APP_ID}`, `${process.env.APP_CERTIFICATE}`, channelName, uid, role, privilegeExpireTime);
     // return the token
-    return resp.json({ 'token': token , 'uid': uid, 'channelName': channelName, 'appID': `${process.env.APP_ID}`, 'certificate': `${process.env.APP_CERTIFICATE}`});
+    return resp.json({ 'token': token , 'uid': uid, 'channelName': channelName, 'appID': `${process.env.APP_ID}`, 'certificate': `${process.env.APP_CERTIFICATE}`, 'expireTime': expireTime, 'role': role });
 
 };
+
 
 app.get('/access_token', nocache, generateAccessToken);
 
