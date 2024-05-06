@@ -58,15 +58,17 @@ function LanguageRunner() {
 
     const fetchCode = async (lang) => {
         try {
+            const langCodeKey = lang === 'javascript' ? 'nodeCode' : `${lang}Code`; // Adjusting key based on language
             const res = await axios.get(`http://localhost:4000/editor/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            setCode(res.data.room[`${lang}Code`]);
+            setCode(res.data.room[langCodeKey]);
             setEditorReady(true);
         } catch (err) {
             console.log(err);
         }
     };
+    
 
     const handleEditorChange = (value) => {
         setCode(value);
@@ -141,7 +143,7 @@ function LanguageRunner() {
                                     <div className="output-container mt-4 w-full max-h-50 overflow-y-auto"> 
                                         <div className="text-sm -600 mb-2">OUTPUT:</div>
                                         {output && (
-                                            <pre className="bg-gray-200 rounded p-3 whitespace-pre-wrap break-words">{output}</pre>
+                                            <pre className="bg-gray-200 text-black rounded p-3 whitespace-pre-wrap break-words">{output}</pre>
                                         )}
                                         {error && (
                                             <pre className="bg-red-200 text-red-800 rounded p-3 whitespace-pre-wrap break-words">{error}</pre>
