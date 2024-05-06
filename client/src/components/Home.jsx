@@ -44,7 +44,7 @@ function Home() {
             });
             const id = res.data.newRoom._id;
             localStorage.setItem('room-ID', id)
-            navigate(`/editor/${id}/python`)
+            navigate(`/editor/${id}/room`)
         } catch (err) {
             setError('Something went wrong. Please try again!');
         }
@@ -58,7 +58,7 @@ function Home() {
             });
             const id = res.data.room._id
             localStorage.setItem('room-ID', id)
-            navigate(`/editor/${id}/python`)
+            navigate(`/editor/${id}/room`)
         } catch (err) {
             setError('Something went wrong. Please try again!');
         }

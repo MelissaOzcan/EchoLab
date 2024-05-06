@@ -3,8 +3,8 @@
  * 1. /register: Route to register a new user.
  * 2. /login: Route to login an existing user.
  * 3. /home: Route to the home page.
- * 4. /editor/:id: Route to the editor page, redirects to /editor/:id/python until other languages are supported.
- * 5. /editor/:id/python: Route to the Python runner page.
+ * 4. /editor/:id: Route to the editor page, redirects to /editor/:id/room until other languages are supported.
+ * 5. /editor/:id/room: Route to the Python runner page.
  * 6. *: Catch-all route that redirects to /login.
  */
 
@@ -23,8 +23,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/editor/:id" element={<Navigate replace to="/editor/:id/python" />} />
-          <Route path="/editor/:id/python" element={<LanguageRunner />} />
+          <Route path="/editor/:id" element={<Navigate replace to="/editor/:id/room" />} />
+          <Route path="/editor/:id/room" element={<LanguageRunner />} />
           <Route path="*" element={<Navigate replace to={"/login"} />} />
         </Routes>
       </div>
