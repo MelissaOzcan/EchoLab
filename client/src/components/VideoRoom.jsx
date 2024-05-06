@@ -18,6 +18,7 @@ export const VideoRoom = () => {
   const [localTracks, setLocalTracks] = useState([]);
   const room = localStorage.getItem("room-ID");
   console.log("room id from video room:", room);
+  console.log(localStorage);
 
   const handleUserJoined = async (user, mediaType) => {
     console.log("*********************************user joined", user);
@@ -99,7 +100,7 @@ export const VideoRoom = () => {
   return (
     <div>
       {users.map((user) => (
-        <VideoPlayer key={user.uid} user={user} />
+        <VideoPlayer key={user.uid} user={user}/>
       ))}
     </div>
   );
