@@ -107,26 +107,6 @@ function LanguageRunner() {
         }
     };
 
-    const handleSignOut = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await axios.post(
-                `http://localhost:4000/logout`,
-                {
-                    roomId: id,
-                    username: user
-                },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            )
-            localStorage.removeItem("token");
-            navigate("/login");
-        } catch (e) {
-            setError(e.response?.data?.error || "An error occurred");
-        }
-    }
-
     return (
         <>
         <div className="editor">
@@ -139,7 +119,7 @@ function LanguageRunner() {
                         <select value={language} onChange={e => handleLanguageChange(e.target.value)} className="mb-4">
                             <option value="python">Python</option>
                             <option value="java">Java</option>
-                            <option value="node">Node.js</option>
+                            <option value="javascript">Node.js</option>
                             <option value="cpp">C++</option>
                             <option value="rust">Rust</option>
                         </select>
