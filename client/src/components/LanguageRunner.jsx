@@ -167,12 +167,14 @@ function LanguageRunner() {
                                             <pre className="bg-red-200 text-red-800 rounded p-3 whitespace-pre-wrap break-words">{error}</pre>
                                         )}
                                     </div>
+                                    {/*
                                     <button onClick={() => {
                                         localStorage.removeItem('token');
                                         navigate('/login');
                                     }} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                         Sign Out
                                     </button>
+                                    */}
                                 </div>
                             </form>
                         </div>
