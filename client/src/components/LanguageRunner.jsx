@@ -51,14 +51,15 @@ function LanguageRunner() {
 
 
     const handleLanguageChange = (newLanguage) => {
+        const backendLang = newLanguage === 'javascript' ? 'node' : newLanguage; // Convert 'javascript' to 'node' for backend operations
         setLanguage(newLanguage);
-        socketRef.current.emit('languageChange', { channel: id, language: newLanguage });
+        socketRef.current.emit('languageChange', { channel: id, newLanguage: backendLang });
         fetchCode(newLanguage);
     };
 
     const fetchCode = async (lang) => {
         try {
-            const langCodeKey = lang === 'javascript' ? 'nodeCode' : `${lang}Code`; // Adjusting key based on language
+            const langCodeKey = lang === 'javascript' ? 'nodeCode' : `${lang}Code`;
             const res = await axios.get(`http://localhost:4000/editor/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -77,9 +78,9 @@ function LanguageRunner() {
     };
 
     const updateCodeInDatabase = async (code) => {
+        const backendLang = language === 'javascript' ? 'node' : language; // Convert 'javascript' to 'node' for backend operations
         try {
-            await axios.post(`http://localhost:4000/editor/${id}`,
-                { code, lang: language }, {
+            await axios.post(`http://localhost:4000/editor/${id}`, { code, lang: backendLang }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (err) {
@@ -87,7 +88,6 @@ function LanguageRunner() {
             if (err.response && err.response.status === 401) {
                 navigate('/login');
             }
-            console.log(err);
         }
     };
 
@@ -95,14 +95,12 @@ function LanguageRunner() {
         e.preventDefault();
         setOutput("");
         setError("");
-
-        const compileUrl = `http://localhost:4000/compile/${language.toLowerCase()}`;
-
+        const compileLang = language === 'javascript' ? 'node' : language.toLowerCase(); // Convert 'javascript' to 'node' for compile endpoint
+        const compileUrl = `http://localhost:4000/compile/${compileLang}`;
         try {
             const res = await axios.post(compileUrl, { code: userCode }, {
-                headers: { Authorization: `Bearer ${token}` },
-            }
-            );
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
             setOutput(res.data.result);
         } catch (err) {
             setError(err.response?.data?.error || "An error occurred");
