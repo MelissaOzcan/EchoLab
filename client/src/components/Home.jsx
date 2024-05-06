@@ -80,14 +80,13 @@ function Home() {
                 <button type="submit">Join Room</button>
             </form>
             <li>
-            <button onClick={() => {
-                localStorage.removeItem('token');
-                navigate('/login');
-            }}>Sign Out</button></li>
-            
             <li><form onSubmit={handleSubmitCreate}>
                 <button type="submit">Create New Room</button>
             </form></li>
+            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={() => {
+                localStorage.removeItem('token');
+                navigate('/login');
+            }}>Sign Out</button></li>
             <p>{error}</p>
             </ul>
             </div>
