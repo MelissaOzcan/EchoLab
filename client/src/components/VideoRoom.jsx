@@ -25,11 +25,12 @@ export const VideoRoom = () => {
     console.log("*********************************user joined", user);
     await client.subscribe(user, mediaType);
 
-    if (mediaType === "video") {
-      setUsers((previousUsers) => [...previousUsers, user]);
-    }
+    // if (mediaType === "video") {
+    //   setUsers((previousUsers) => [...previousUsers, user]);
+    // }
 
     if (mediaType === "audio") {
+      setUsers((previousUsers) => [...previousUsers, user]);
       user.audioTrack.play();
     }
   };
@@ -44,13 +45,13 @@ export const VideoRoom = () => {
     // get the channel token, and client
     const fetchTokenJoinChannel = async () => {
       try {
-        channel = room;
+        let channel = room; // Ensure to declare channel using let instead of assigning to the global variable
         const response = await fetch(
           `http://localhost:8080/access_token?channelName=${channel}&role=audience`
         );
         const data = await response.json();
         console.log("data", data);
-        token = data.token;
+        const token = data.token;
         channel = data.channelName;
         console.log("token", token);
         console.log("channel", channel);
@@ -64,13 +65,15 @@ export const VideoRoom = () => {
             .join(appId, channel, token, null)
             .then(
               (uid) =>
-                Promise.all([AgoraRTC.createMicrophoneAndCameraTracks(), uid]) //promise chaining can probs turn this into async/await syntax
+                Promise.all([AgoraRTC.createMicrophoneAndCameraTracks(), uid])
             )
             .then(([tracks, uid]) => {
-              const [audioTrack, videoTrack] = tracks;
+              // const [audioTrack, videoTrack] = tracks;
+              const [audioTrack] = tracks;
+              // Store the local tracks in a ref
               localTrack.current = tracks;
               setLocalTracks(tracks);
-              setUsers((users) => [...users, { uid, videoTrack, audioTrack }]);
+              setUsers((users) => [...users, { uid, audioTrack }]);
               client.publish(tracks);
             });
         } else {
@@ -80,24 +83,31 @@ export const VideoRoom = () => {
         console.error(error);
       }
     };
-    // const {token, channel} = await fetchToken();
-    // console.log("channel", channel);
-    // console.log("token", token);
+
     fetchTokenJoinChannel();
-    //channel = room;
 
     return () => {
-      for (let localTrack of localTracks) {
-        localTrack.stop();
-        localTrack.close();
+      // Check if local tracks exist before accessing them
+      if (localTrack.current) {
+        localTrack.current.forEach((track) => {
+          // Stop and close each local track
+          track.stop();
+          track.close();
+        });
       }
+      
       client.off("user-published", handleUserJoined);
       client.off("user-left", handleUserLeft);
-      client.unpublish(localTrack.current).then(() => {
-        client.leave();
-      });
+      
+      // Unpublish the local tracks
+      if (localTrack.current) {
+        client.unpublish(localTrack.current).then(() => {
+          client.leave();
+        });
+      }
     };
-  }, []);
+  }, [room]);
+
 
   return (
     <div>
