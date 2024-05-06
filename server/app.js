@@ -42,6 +42,10 @@ io.on('connection', (socket) => {
         io.emit('codeUpdate', {channel, code});
     });
 
+    socket.on('languageUpdate', ({ channel, language}) => {
+        io.emit('languageUpdate', {channel, language});
+    });
+
     socket.on('updateParticipants', ({ channel, participants }) => {
         io.emit('updateParticipants', {channel, participants});
     });
