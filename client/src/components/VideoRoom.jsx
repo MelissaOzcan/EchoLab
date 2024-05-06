@@ -1,6 +1,6 @@
-import React from "react";
+
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { VideoPlayer } from "./VideoPlayer";
 
 // 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
@@ -16,8 +16,10 @@ const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 export const VideoRoom = () => {
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState([]);
+  const localTrack = useRef([]);
   const room = localStorage.getItem("room-ID");
   console.log("room id from video room:", room);
+  console.log(localStorage);
 
   const handleUserJoined = async (user, mediaType) => {
     console.log("*********************************user joined", user);
@@ -66,6 +68,7 @@ export const VideoRoom = () => {
             )
             .then(([tracks, uid]) => {
               const [audioTrack, videoTrack] = tracks;
+              localTrack.current = tracks;
               setLocalTracks(tracks);
               setUsers((users) => [...users, { uid, videoTrack, audioTrack }]);
               client.publish(tracks);
@@ -90,7 +93,7 @@ export const VideoRoom = () => {
       }
       client.off("user-published", handleUserJoined);
       client.off("user-left", handleUserLeft);
-      client.unpublish(tracks).then(() => {
+      client.unpublish(localTrack.current).then(() => {
         client.leave();
       });
     };
@@ -99,7 +102,7 @@ export const VideoRoom = () => {
   return (
     <div>
       {users.map((user) => (
-        <VideoPlayer key={user.uid} user={user} />
+        <VideoPlayer key={user.uid} user={user}/>
       ))}
     </div>
   );
