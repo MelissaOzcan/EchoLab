@@ -17,7 +17,7 @@ const VoiceChannel = () => {
       <div>
         {joined && (
           <div className="mt-2">
-            <p className="text-black">Voice Channel: General</p>
+            {/* <p className="text-black">Voice Channel: General</p> */}
             <VideoRoom />
           </div>
         )}

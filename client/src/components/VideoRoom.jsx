@@ -1,13 +1,13 @@
-
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useState, useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import { VideoPlayer } from "./VideoPlayer";
+import { LuMic } from "react-icons/lu";
+import { LuMicOff } from "react-icons/lu";
+import { m } from "framer-motion";
 
 // 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
 
 const appId = "eadb6e134cf641d183125d8746725119";
-//const token = "006eadb6e134cf641d183125d8746725119IADwIOgAYd/pBQSpvsE28kVvy+Qj9xX+BRBdfB107xff/QSqNa4AAAAAEADOFL8AMUQ5ZgEAAQDBADhm";
-//let channel = "sabah1250";
 let token = "";
 let channel = "";
 
@@ -18,20 +18,22 @@ export const VideoRoom = () => {
   const [localTracks, setLocalTracks] = useState([]);
   const localTrack = useRef([]);
   const room = localStorage.getItem("room-ID");
+  const [micMuted, setmicMuted] = useState(true);
+
   console.log("room id from video room:", room);
   console.log(localStorage);
 
   const handleUserJoined = async (user, mediaType) => {
-    console.log("*********************************user joined", user);
     await client.subscribe(user, mediaType);
 
-    // if (mediaType === "video") {
-    //   setUsers((previousUsers) => [...previousUsers, user]);
-    // }
+    const userExists = users.some((u) => u.uid === user.uid);
 
-    if (mediaType === "audio") {
-      setUsers((previousUsers) => [...previousUsers, user]);
-      user.audioTrack.play();
+    if (!userExists) {
+      if (mediaType === "audio") {
+        setUsers((previousUsers) => [...previousUsers, user]);
+        user.audioTrack.play();
+        // user.audioTrack.setMuted(micMuted);
+      }
     }
   };
 
@@ -45,7 +47,9 @@ export const VideoRoom = () => {
     // get the channel token, and client
     const fetchTokenJoinChannel = async () => {
       try {
-        let channel = room; // Ensure to declare channel using let instead of assigning to the global variable
+        // checkMicrophonePermission();
+
+        let channel = room; 
         const response = await fetch(
           `http://localhost:8080/access_token?channelName=${channel}&role=audience`
         );
@@ -63,15 +67,15 @@ export const VideoRoom = () => {
           //join room here
           client
             .join(appId, channel, token, null)
-            .then(
-              (uid) =>
-                Promise.all([AgoraRTC.createMicrophoneAudioTrack(), uid])
+            .then((uid) =>
+              Promise.all([AgoraRTC.createMicrophoneAudioTrack(), uid])
             )
             .then(([tracks, uid]) => {
               // const [audioTrack, videoTrack] = tracks;
               const audioTrack = tracks;
-              // Store the local tracks in a ref
               localTrack.current = tracks;
+              // tracks.setMuted(micMuted);
+              console.log("currently mic muted is", micMuted);
               setLocalTracks(tracks);
               setUsers((users) => [...users, { uid, audioTrack }]);
               client.publish(tracks);
@@ -87,7 +91,6 @@ export const VideoRoom = () => {
     fetchTokenJoinChannel();
 
     return () => {
-      // Check if local tracks exist before accessing them
       if (localTrack.current) {
         console.log("local track", localTrack.current);
         localTrack.current.stop();
@@ -98,10 +101,10 @@ export const VideoRoom = () => {
         //   track.close();
         // });
       }
-      
+
       client.off("user-published", handleUserJoined);
       client.off("user-left", handleUserLeft);
-      
+
       // Unpublish the local tracks
       if (localTrack.current) {
         client.unpublish(localTrack.current).then(() => {
@@ -111,11 +114,42 @@ export const VideoRoom = () => {
     };
   }, [room]);
 
+  const toggleMicrophonePermission = () => {
+    if (micMuted) {
+      console.log("mic is muted");
+      localTrack.current.setMuted(false);
+      // localTrack.current.audioTrack.play();
+      setmicMuted(false);
+    } else {
+      console.log("mic is unmuted");
+      localTrack.current.setMuted(true);
+      // localTrack.current.audioTrack.stop();
+      setmicMuted(true);
+    }
+    // localTrack.current.setMuted(micMuted);
+  };
 
   return (
     <div>
+      <div onClick={toggleMicrophonePermission}>
+        {micMuted ? (
+          <div className="text-red-500 text-2xl mb-4">
+            <div>
+              <LuMicOff className="inline-block" size={30} />
+            </div>
+            <div>Muted</div>
+          </div>
+        ) : (
+          <div className="text-green-500 text-2xl mb-4 gap-4">
+            <div>
+              <LuMic className="inline-block" size={30} />
+            </div>
+            <div>Unmuted</div>
+          </div>
+        )}
+      </div>
       {users.map((user) => (
-        <VideoPlayer key={user.uid} user={user}/>
+        <VideoPlayer key={user.uid} user={user} />
       ))}
     </div>
   );
