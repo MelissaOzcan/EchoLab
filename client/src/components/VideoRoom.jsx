@@ -65,21 +65,45 @@ export const VideoRoom = () => {
           client.on("user-left", handleUserLeft);
 
           //join room here
-          client
-            .join(appId, channel, token, null)
-            .then((uid) =>
-              Promise.all([AgoraRTC.createMicrophoneAudioTrack(), uid])
-            )
-            .then(([tracks, uid]) => {
-              // const [audioTrack, videoTrack] = tracks;
-              const audioTrack = tracks;
-              localTrack.current = tracks;
-              // tracks.setMuted(micMuted);
-              console.log("currently mic muted is", micMuted);
-              setLocalTracks(tracks);
-              setUsers((users) => [...users, { uid, audioTrack }]);
-              client.publish(tracks);
-            });
+          // client
+          //   .join(appId, channel, token, null)
+          //   .then((uid) =>
+          //     Promise.all([AgoraRTC.createMicrophoneAudioTrack(), uid])
+          //   )
+          //   .then(([tracks, uid]) => {
+          //     // const [audioTrack, videoTrack] = tracks;
+          //     const audioTrack = tracks;
+          //     localTrack.current = tracks;
+          //     // tracks.setMuted(micMuted);
+          //     console.log("currently mic muted is", micMuted);
+          //     setLocalTracks(tracks);
+          //     setUsers((users) => [...users, { uid, audioTrack }]);
+          //     client.publish(tracks);
+          //   });
+          const [tracks, uid] = await Promise.all([
+            AgoraRTC.createMicrophoneAudioTrack(),
+            client.join(appId, channel, token, null),
+          ]);
+          const audioTrack = tracks;
+          localTrack.current = tracks;
+          console.log("currently mic muted is", micMuted);
+          setLocalTracks(tracks);
+          // setUsers((users) => [...users, { uid, audioTrack }]);
+          setUsers((users) => {
+            // Check if the UID already exists in the users array
+            const userExists = users.some(user => user.uid === uid);
+            
+            // If the user doesn't exist, add it to the users array
+            if (!userExists) {
+              return [...users, { uid, audioTrack }];
+            } else {
+              // If the user already exists, return the unchanged users array
+              return users;
+            }
+          });
+          client.publish(tracks);
+          toggleMicrophonePermission();
+          toggleMicrophonePermission();
         } else {
           console.error("token or channel not found");
         }
@@ -91,7 +115,7 @@ export const VideoRoom = () => {
     fetchTokenJoinChannel();
 
     return () => {
-      if (localTrack.current) {
+      if (localTrack.current && localTrack.current.length > 0) {
         console.log("local track", localTrack.current);
         localTrack.current.stop();
         localTrack.current.close();

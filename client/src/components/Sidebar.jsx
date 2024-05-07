@@ -156,28 +156,10 @@ function Sidebar() {
       </div>
       <hr className="border-white-700" />
       <div>
+        <h3 className="text-gray-400">Microphone Permission</h3>
         <VoiceChannel />
       </div>
-      <div>
-        <h3 className="text-gray-400">Microphone Permission</h3>
-        {/* <div onClick={toggleMicrophonePermission}>
-          {microphonePermission ? (
-            <div className="text-green-500 text-2xl mb-4">
-              <div>
-                <LuMic className="inline-block" size={30} />
-              </div>
-              <div>Unmuted</div>
-            </div>
-          ) : (
-            <div className="text-red-500 text-2xl mb-4 gap-4">
-              <div>
-                <LuMicOff className="inline-block" size={30} />
-              </div>
-              <div>Muted</div>
-            </div>
-          )}
-        </div> */}
-      </div>
+      
       <hr className="border-white-700" />
       <div className="mt-4">
         <button
