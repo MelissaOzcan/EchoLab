@@ -55,6 +55,6 @@ io.on('connection', (socket) => {
     });
 });
 
-httpServer.listen(process.env.PORT, () => {
+httpServer.listen(process.env.PORT, '0.0.0.0', () => {
     console.log(`We've got a server with HTTP and WebSocket on http://localhost:${process.env.PORT}/`);
 });

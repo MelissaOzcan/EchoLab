@@ -163,9 +163,9 @@ function LanguageRunner() {
                                 <div className='flex flex-col items-center w-full'>
                                         <button type="submit" className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Run</button>
                                         <div className="output-container mt-4 w-full max-h-50 overflow-y-auto"> 
-                                            <div className="text-sm -600 mb-2">OUTPUT:</div>
+                                            <div className="text-sm -600 mb-2">OUTPUT</div>
                                             {output && (
-                                                <pre className="bg-gray-200 text-black rounded p-3 whitespace-pre-wrap break-words">{output}</pre>
+                                                <pre className="bg-gray-800 text-white rounded p-3 whitespace-pre-wrap break-words">{output}</pre>
                                             )}
                                             {error && (
                                                 <pre className="bg-red-200 text-red-800 rounded p-3 whitespace-pre-wrap break-words">{error}</pre>
