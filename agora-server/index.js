@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import pkg from 'agora-access-token';
+import cors from 'cors';
 const { RtcTokenBuilder, RtmRole, RtcRole } = pkg;
 
 dotenv.config();
@@ -11,6 +12,11 @@ const APP_ID = process.env.APP_ID;
 const APP_CERTIFICATE = process.env.APP_CERTIFICATE;
 
 const app = express();
+
+const corsOptions = {
+    origin: `http://localhost:${process.env.CLIENT_PORT}`,
+    optionsSuccessStatus: 200
+};
 
 const nocache = (req, res, next) => {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -61,6 +67,9 @@ const generateAccessToken = (req, resp) => {
     return resp.json({ 'token': token , 'uid': uid, 'channelName': channelName, 'appID': `${process.env.APP_ID}`, 'certificate': `${process.env.APP_CERTIFICATE}`, 'expireTime': expireTime, 'role': role });
 
 };
+
+app.use(cors(corsOptions));
+
 
 
 app.get('/access_token', nocache, generateAccessToken);
