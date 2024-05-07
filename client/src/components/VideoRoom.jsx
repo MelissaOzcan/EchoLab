@@ -65,11 +65,11 @@ export const VideoRoom = () => {
             .join(appId, channel, token, null)
             .then(
               (uid) =>
-                Promise.all([AgoraRTC.createMicrophoneAndCameraTracks(), uid])
+                Promise.all([AgoraRTC.createMicrophoneAudioTrack(), uid])
             )
             .then(([tracks, uid]) => {
               // const [audioTrack, videoTrack] = tracks;
-              const [audioTrack] = tracks;
+              const audioTrack = tracks;
               // Store the local tracks in a ref
               localTrack.current = tracks;
               setLocalTracks(tracks);
@@ -89,11 +89,14 @@ export const VideoRoom = () => {
     return () => {
       // Check if local tracks exist before accessing them
       if (localTrack.current) {
-        localTrack.current.forEach((track) => {
-          // Stop and close each local track
-          track.stop();
-          track.close();
-        });
+        console.log("local track", localTrack.current);
+        localTrack.current.stop();
+        localTrack.current.close();
+        // localTrack.current.forEach((track) => {
+        //   // Stop and close each local track
+        //   track.stop();
+        //   track.close();
+        // });
       }
       
       client.off("user-published", handleUserJoined);
