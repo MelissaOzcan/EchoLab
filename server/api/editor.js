@@ -28,7 +28,8 @@ router
             return res.status(200).json({ room: room });
         } catch (err) {
             console.log(err);
-            return res.status(400).json({ "error": `'${lang}' is not available.` });
+            //return res.redirect("/login");
+            return res.status(400).json({ "error": `room is not available.` });
         }
     })
     .post("/:id", apiLimiter, authorizeToken, async (req, res) => {
@@ -65,8 +66,10 @@ router
             const participants = await getParticipants(roomId);
             return res.status(200).json({ participants: participants });
         } catch (err) {
-            console.log(err);
-            return res.status(400).json({ "error": `'${lang}' is not available.` });
+            if (err.response?.status !== 400) { // in this case, the error is that another participant deleted the room and the other users just need to be sent back to original page
+                console.log(err);
+            }
+            return res.status(400).json({ "error": `room is not available.` });
         }
     });
 

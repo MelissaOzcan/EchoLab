@@ -4,6 +4,7 @@
  */
 
 import compileRoutes from './compile.js';
+import deleteRoomRoutes from './deleteroom.js';
 import editorRoutes from './editor.js';
 import homeRoutes from './home.js';
 import loginRoutes from './login.js';
@@ -17,6 +18,7 @@ const constructorMethod = (app) => {
     app.use('/editor', editorRoutes);
     app.use('/home', homeRoutes);
     app.use('/compile', compileRoutes);
+    app.use('/deleteroom', deleteRoomRoutes);
     app.use('*', (_, res) => {
         res.redirect('/login');
     });

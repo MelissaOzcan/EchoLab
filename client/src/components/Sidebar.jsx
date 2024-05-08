@@ -1,10 +1,9 @@
-import React from "react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import VoiceChannel from "./VoiceChannel";
 import io from "socket.io-client";
 import "../index.css";
+import VoiceChannel from "./VoiceChannel";
 
 function Sidebar() {
     const [participants, setParticipants] = React.useState([]);
@@ -42,7 +41,13 @@ function Sidebar() {
             });
             setParticipants(response.data.participants);
         } catch (error) {
-            console.error('Error fetching participants:', error);
+            // this means another user deleted the room
+            if (error.response?.status === 400) {
+                navigate('/home');
+            }
+            else {
+                console.error('Error fetching participants:', error);
+            }
         }
     }
 
@@ -74,10 +79,30 @@ function Sidebar() {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             )
-            console.log("room=")
             localStorage.removeItem("room-id");
             navigate("/login");
             handleParticipantsChange(participants);
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred");
+        }
+    }
+
+    const handleDeleteRoom = async (e) => {
+        e.preventDefault();
+        handleParticipantsChange([]); // remove the current participant from the room
+        try {
+            const res = await axios.delete(
+                `http://localhost:4000/deleteroom/${room}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred while deleting the room")
+        }
+        try { 
+            localStorage.removeItem("room-id");
+            navigate("/home");
         } catch (err) {
             console.log(err.response?.data?.error || "An error occurred");
         }
@@ -117,6 +142,11 @@ function Sidebar() {
             <div className="mt-4">
                 <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleLeaveRoom}>
                     Leave Room
+                </button>
+            </div>
+            <div className="mt-4">
+                <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleDeleteRoom}>
+                    Delete Room
                 </button>
             </div>
             {/* 
