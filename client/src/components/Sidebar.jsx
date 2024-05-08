@@ -55,11 +55,6 @@ function Sidebar() {
                 console.error('Error fetching participants:', error);
             }
         }
-        try {
-            setParticipants(response.data.participants);
-        } catch (error) {
-            console.error("Error fetching participants:", error);
-        }
     };
 
     const handleParticipantsChange = (newParticipants) => {
