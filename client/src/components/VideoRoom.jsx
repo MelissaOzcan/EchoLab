@@ -50,7 +50,7 @@ export const VideoRoom = () => {
 
         let channel = room; 
         const response = await fetch(
-          `https://echolab.site:8080/access_token?channelName=${channel}&role=audience`
+          `https://3.142.174.77:8080/access_token?channelName=${channel}&role=audience`
         );
         const data = await response.json();
         console.log("data", data);

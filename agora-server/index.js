@@ -22,7 +22,7 @@ const sslOptions = {
 };
 
 const corsOptions = {
-    origin: `https://echolab.site:${process.env.CLIENT_PORT}`,
+    origin: `https://3.142.174.77:${process.env.CLIENT_PORT}`,
     optionsSuccessStatus: 200
 };
 

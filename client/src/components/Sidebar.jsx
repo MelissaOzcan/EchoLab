@@ -17,7 +17,7 @@ function Sidebar() {
     const [mediaStream, setMediaStream] = useState(null);
 
     useEffect(() => {
-        socketRef.current = io("https://echolab.site:4000");
+        socketRef.current = io("https://3.142.174.77:4000");
         handleParticipantsChange(participants);
         socketRef.current.on("updateParticipants", ({ channel, participants }) => {
             if (channel === room) {
@@ -40,7 +40,7 @@ function Sidebar() {
 
     const fetchParticipants = async () => {
         try {
-            const response = await axios.get(`https://echolab.site:4000/editor/participants/${room}`, {
+            const response = await axios.get(`https://3.142.174.77:4000/editor/participants/${room}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setParticipants(response.data.participants);
@@ -80,7 +80,7 @@ function Sidebar() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `https://echolab.site:4000/logout`,
+                `https://3.142.174.77:4000/logout`,
                 {
                     roomId: room,
                     username: user
@@ -109,7 +109,7 @@ function Sidebar() {
         handleParticipantsChange([]); // remove the current participant from the room
         try {
             const res = await axios.delete(
-                `https://echolab.site:4000/deleteroom/${room}`,
+                `https://3.142.174.77:4000/deleteroom/${room}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
