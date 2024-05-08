@@ -184,14 +184,6 @@ function Sidebar() {
             </div>
 
             <hr className="border-white-700" />
-            <div className="mt-4">
-                <button
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                    onClick={handleLeaveRoom}
-                >
-                    Leave Room
-                </button>
-            </div>
         </div >
     );
 }
