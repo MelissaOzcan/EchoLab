@@ -29,25 +29,6 @@ router
             return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
         }
     })
-// NOTE: This is not meant to be here. Will move it later.
-// .delete("/", apiLimiter, authorizeToken, async (req, res) => {
-//     const { id } = req.body;
-//     try {
-//         parameterCheck(id);
-//         strValidCheck(id);
-//         id = idCheck(id);
-//     } catch (err) {
-//         return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
-//     }
-//     try {
-//         const deletedRoom = await deleteRoom(id);
-//         if (!deletedRoom) {
-//             throw { status: 500, message: "Internal Server Error." };
-//         }
-//     } catch (err) {
-//         return res.status(err.status || 500).json({ "error": err.message || "Internal Server Error." });
-//     }
-// });
 
 router
     .post("/join", apiLimiter, authorizeToken, async (req, res) => {

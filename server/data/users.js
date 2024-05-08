@@ -3,6 +3,7 @@
  * @description CRUD for users collection.
  */
 
+import { ObjectId } from "mongodb";
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import { users } from '../config/mongoCollections.js';
@@ -112,5 +113,36 @@ export const authenticateUser = async (email, password) => {
         throw { status: 401, message: 'Email and Password do not match' };
     } else {
         return user;
+    }
+}
+
+
+/**
+ * @function deleteUser
+ * @param {string} id
+ * @return {object} Returns object indicating User is deleted
+ * @throws {InternalServerError} Throws ISR if MongoDB deleteOne() fails 
+ * @description This function deletes user with given ID.
+ */
+
+export const deleteUser = async (username) => {
+    try {
+        parameterCheck(username);
+        strValidCheck(username);
+        console.log("deleteUser1")
+        let user = await getUserByUsername(username);
+
+        const userCollection = await users();
+        const deletedUser = await userCollection.deleteOne({ _id: new ObjectId(user._id) });
+        console.log("deleteUser2")
+
+        if (!deletedUser.acknowledged || deletedUser.deletedCount !== 1) {
+            throw { status: 500, message: "Internal Server Error" };
+        }
+        console.log("deleteUser3")
+
+        return { deleted: true};
+    } catch (err) {
+        throw { status: 500, message: err.message };
     }
 }

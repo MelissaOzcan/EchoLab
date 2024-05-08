@@ -56,7 +56,7 @@ export const getRoom = async (id) => {
     const roomCollection = await rooms();
     const room = await roomCollection.findOne({ _id: new ObjectId(id) });
     if (!room) {
-        throw { status: 404, message: `No room with ID: ${id}` };
+        throw { status: 404, message: `(in getRoom) No room with ID: ${id}` };
     }
     return room;
 }
@@ -167,7 +167,7 @@ export const getParticipants = async (id) => {
     const roomCollection = await rooms();
     const room = await roomCollection.findOne({ _id: new ObjectId(id) });
     if (!room) {
-        throw { status: 404, message: `No room with ID: ${id}` };
+        throw { status: 404, message: `(in getParticipants) No room with ID: ${id}` };
     }
     return room.participants;
 }
@@ -190,7 +190,7 @@ export const removeParticipant = async (id, username) => {
     const room = await roomCollection.findOne({ _id: new ObjectId(id) });
 
     if (!room) {
-        throw { status: 404, message: `No room with ID: ${id}` };
+        throw { status: 404, message: `(in removeParticipants) No room with ID: ${id}` };
     }
 
     const updatedParticipants = {

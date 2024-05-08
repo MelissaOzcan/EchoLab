@@ -23,13 +23,13 @@ function Home() {
     function createBubble() {
         const bubble = document.createElement('div');
         bubble.classList.add('bubble');
-        let size = Math.random() * 15 + 10; 
+        let size = Math.random() * 15 + 10;
         bubble.style.width = `${size}px`;
         bubble.style.height = bubble.style.width;
         bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.opacity = Math.random() * 0.5 + 0.5; 
+        bubble.style.opacity = Math.random() * 0.5 + 0.5;
         document.querySelector('.background-static-home').appendChild(bubble);
-    
+
         setTimeout(() => {
             bubble.remove();
         }, 10000);
@@ -64,31 +64,50 @@ function Home() {
         }
     };
 
+    const handleDeleteUser = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.delete(`http://localhost:4000/deleteuser/${username}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            localStorage.removeItem('token');
+            navigate('/login');
+        } catch (err) {
+            setError('Something went wrong. Please try again!');
+            console.log(err.response?.data?.error || "An error occurred while deleting the user");
+        }
+    };
+
     return (
         <div className='background-static-home'>
             <div className="App-header">
-               <img src={Echo} className="App-logo" alt="logo" />
-             </div>
+                <img src={Echo} className="App-logo" alt="logo" />
+            </div>
             <div className='form-container'>
-            <ul>
-            <h2>Welcome, {username}!</h2>
-            <form onSubmit={handleSubmitJoin}>
-                <li>Room ID:
-                <br />
-                <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} /> </li>
-                <br />
-                <button type="submit">Join Room</button>
-            </form>
-            <li>
-            <li><form onSubmit={handleSubmitCreate}>
-                <button type="submit">Create New Room</button>
-            </form></li>
-            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={() => {
-                localStorage.removeItem('token');
-                navigate('/login');
-            }}>Sign Out</button></li>
-            <p>{error}</p>
-            </ul>
+                <ul>
+                    <h2>Welcome, {username}!</h2>
+                    <form onSubmit={handleSubmitJoin}>
+                        <li>Room ID:
+                            <br />
+                            <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} /> </li>
+                        <br />
+                        <button type="submit">Join Room</button>
+                    </form>
+                    <li>
+                        <li><form onSubmit={handleSubmitCreate}>
+                            <button type="submit">Create New Room</button>
+                        </form></li>
+                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={() => {
+                            localStorage.removeItem('token');
+                            navigate('/login');
+                        }}>Sign Out</button></li>
+                    <div className="mt-4">
+                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleDeleteUser}>
+                            Delete User
+                        </button>
+                    </div>
+                    <p>{error}</p>
+                </ul>
             </div>
         </div>
     );

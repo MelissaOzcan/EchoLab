@@ -1,10 +1,9 @@
-import React from "react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import VoiceChannel from "./VoiceChannel";
 import io from "socket.io-client";
 import "../index.css";
+
 import { LuMic } from "react-icons/lu";
 import { LuMicOff } from "react-icons/lu";
 
@@ -41,13 +40,20 @@ function Sidebar() {
 
   
 
-
-  const fetchParticipants = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/editor/participants/${room}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
+    const fetchParticipants = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/editor/participants/${room}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setParticipants(response.data.participants);
+        } catch (error) {
+            // this means another user deleted the room
+            if (error.response?.status === 400) {
+                navigate('/home');
+            }
+            else {
+                console.error('Error fetching participants:', error);
+            }
         }
       );
       setParticipants(response.data.participants);
@@ -77,17 +83,24 @@ function Sidebar() {
     );
   };
 
-  const handleLeaveRoom = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        `http://localhost:4000/logout`,
-        {
-          roomId: room,
-          username: user,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+    const handleLeaveRoom = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(
+                `http://localhost:4000/logout`,
+                {
+                    roomId: room,
+                    username: user
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+            localStorage.removeItem("room-id");
+            navigate("/login");
+            handleParticipantsChange(participants);
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred");
         }
       );
       console.log("room=");
@@ -99,59 +112,77 @@ function Sidebar() {
     }
   };
 
-//   const toggleMicrophonePermission = () => {
-//     console.log("Toggling microphone permission");
-//     if (microphonePermission) {
-//       if (mediaStream) {
-//         mediaStream.getTracks().forEach((track) => {
-//           track.stop();
-//           track.enabled = false;
-//         });
-//       }
-//       setMediaStream(null); 
-//       setMicrophonePermission(false); 
-//     } else {
-//         navigator.mediaDevices.getUserMedia({ audio: true })
-//         .then(stream => {
-//             setMediaStream(stream); 
-//             setMicrophonePermission(true); 
-//         })
-//         .catch(error => {
-//             console.error('Error accessing microphone:', error);
-//             setMicrophonePermission(false);
-//         });
-//     }
-//   };
+    const handleDeleteRoom = async (e) => {
+        e.preventDefault();
+        handleParticipantsChange([]); // remove the current participant from the room
+        try {
+            const res = await axios.delete(
+                `http://localhost:4000/deleteroom/${room}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred while deleting the room")
+        }
+        try { 
+            localStorage.removeItem("room-id");
+            navigate("/home");
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred");
+        }
+    }
 
-  return (
-    <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
-      <div className="my-2 mb-4">
-        <h1 className="text-2xl">EchoLab</h1>
-        <h3 className="text-gray-400">
-          Room:
-          <button
-            onClick={copyRoomIdToClipboard}
-            className="text-sm text-black py-1 px-3 rounded mt-2"
-          >
-            Copy Room ID
-          </button>
-          {room}
-        </h3>
-        {showToast && (
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-green-500 text-white px-4 py-2 rounded">
-              Room ID Copied!
+    return (
+        <div className="bg-gray-800 h-full w-64 px-4 py-2 bg-opacity-50">
+            <div className="my-2 mb-4">
+                <h1 className="text-2xl">EchoLab</h1>
+                <h3 className="text-gray-400">Room:
+                <button onClick={copyRoomIdToClipboard} className="text-sm text-black py-1 px-3 rounded mt-2">
+                    Copy Room ID
+                </button> 
+                {room}</h3>
+                {showToast && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-green-500 text-white px-4 py-2 rounded">
+                            Room ID Copied!
+                        </div>
+                    </div>
+                )}
+                <br />
+                <div>
+                    <h3 className="text-gray-400">Participants</h3>
+                    <ul>
+                        {participants.map((participant, index) => (
+                            <li key={index}>{participant}</li>
+                        ))} 
+                    </ul>
+                </div>
             </div>
-          </div>
-        )}
-        <br />
-        <div>
-          <h3 className="text-gray-400">Participants</h3>
-          <ul>
-            {participants.map((participant, index) => (
-              <li key={index}>{participant}</li>
-            ))}
-          </ul>
+            <hr className="border-white-700" />
+            <div>
+                <VoiceChannel />
+            </div>
+            <hr className="border-white-700" />
+            <div className="mt-4">
+                <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleLeaveRoom}>
+                    Leave Room
+                </button>
+            </div>
+            <div className="mt-4">
+                <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleDeleteRoom}>
+                    Delete Room
+                </button>
+            </div>
+            {/* 
+            <button onClick={(e) => {
+                handleLeaveRoom(e);
+                localStorage.removeItem('token');
+                navigate('/login');
+            }} className="mt-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">
+                Sign Out
+            </button>
+            */}
         </div>
       </div>
       <hr className="border-white-700" />
