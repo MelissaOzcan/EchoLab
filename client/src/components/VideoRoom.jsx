@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { VideoPlayer } from "./VideoPlayer";
 import { LuMic } from "react-icons/lu";
 import { LuMicOff } from "react-icons/lu";
-import { m } from "framer-motion";
+//import { m } from "framer-motion";
 
 // 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
 
