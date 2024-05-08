@@ -10,7 +10,7 @@ export const VideoPlayer = ({ user, username }) => {
 
   return (
     <div>
-      Uid: {user.uid} is in VC
+      {/* Uid: {user.uid} is in VC */}
       {/* Username: {username} */}
       {/* <div
         ref={ref}
