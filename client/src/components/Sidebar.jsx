@@ -3,42 +3,42 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import "../index.css";
-
+import VoiceChannel from "./VoiceChannel";
 import { LuMic } from "react-icons/lu";
 import { LuMicOff } from "react-icons/lu";
 
 function Sidebar() {
-  const [participants, setParticipants] = React.useState([]);
-  const room = localStorage.getItem("room-ID");
-  const user = localStorage.getItem("username");
-  const navigate = useNavigate();
-  const [showToast, setShowToast] = useState(false);
-  const token = localStorage.getItem("token");
-  const socketRef = useRef();
-  const [microphonePermission, setMicrophonePermission] = useState(false);
-  const [mediaStream, setMediaStream] = useState(null);
+    const [participants, setParticipants] = React.useState([]);
+    const room = localStorage.getItem("room-ID");
+    const user = localStorage.getItem("username");
+    const navigate = useNavigate();
+    const [showToast, setShowToast] = useState(false);
+    const token = localStorage.getItem("token");
+    const socketRef = useRef();
+    const [microphonePermission, setMicrophonePermission] = useState(false);
+    const [mediaStream, setMediaStream] = useState(null);
 
-  useEffect(() => {
-    socketRef.current = io("http://localhost:4000");
-    handleParticipantsChange(participants);
-    socketRef.current.on("updateParticipants", ({ channel, participants }) => {
-      if (channel === room) {
-        setParticipants(participants);
+    useEffect(() => {
+        socketRef.current = io("http://localhost:4000");
+        handleParticipantsChange(participants);
+        socketRef.current.on("updateParticipants", ({ channel, participants }) => {
+            if (channel === room) {
+                setParticipants(participants);
+                fetchParticipants();
+            }
+        });
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+    }, [room]);
+
+    useEffect(() => {
+        // checkMicrophonePermission();
         fetchParticipants();
-      }
-    });
+    }, [room]);
 
-    return () => {
-      socketRef.current.disconnect();
-    };
-  }, [room]);
 
-  useEffect(() => {
-    // checkMicrophonePermission();
-    fetchParticipants();
-  }, [room]);
-
-  
 
     const fetchParticipants = async () => {
         try {
@@ -55,33 +55,33 @@ function Sidebar() {
                 console.error('Error fetching participants:', error);
             }
         }
-      );
-      setParticipants(response.data.participants);
-    } catch (error) {
-      console.error("Error fetching participants:", error);
-    }
-  };
+        try {
+            setParticipants(response.data.participants);
+        } catch (error) {
+            console.error("Error fetching participants:", error);
+        }
+    };
 
-  const handleParticipantsChange = (newParticipants) => {
-    setParticipants(newParticipants);
-    socketRef.current.emit("updateParticipants", {
-      channel: room,
-      participants: newParticipants,
-    });
-    fetchParticipants();
-  };
+    const handleParticipantsChange = (newParticipants) => {
+        setParticipants(newParticipants);
+        socketRef.current.emit("updateParticipants", {
+            channel: room,
+            participants: newParticipants,
+        });
+        fetchParticipants();
+    };
 
-  const copyRoomIdToClipboard = () => {
-    navigator.clipboard.writeText(room).then(
-      () => {
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 800); // hide toast after 3 seconds
-      },
-      () => {
-        console.error("Failed to copy room ID");
-      }
-    );
-  };
+    const copyRoomIdToClipboard = () => {
+        navigator.clipboard.writeText(room).then(
+            () => {
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 800); // hide toast after 3 seconds
+            },
+            () => {
+                console.error("Failed to copy room ID");
+            }
+        );
+    };
 
     const handleLeaveRoom = async (e) => {
         e.preventDefault();
@@ -102,15 +102,14 @@ function Sidebar() {
         } catch (err) {
             console.log(err.response?.data?.error || "An error occurred");
         }
-      );
-      console.log("room=");
-      localStorage.removeItem("room-id");
-      navigate("/login");
-      handleParticipantsChange(participants);
-    } catch (err) {
-      console.log(err.response?.data?.error || "An error occurred");
-    }
-  };
+        try {
+            localStorage.removeItem("room-id");
+            navigate("/login");
+            handleParticipantsChange(participants);
+        } catch (err) {
+            console.log(err.response?.data?.error || "An error occurred");
+        }
+    };
 
     const handleDeleteRoom = async (e) => {
         e.preventDefault();
@@ -125,7 +124,7 @@ function Sidebar() {
         } catch (err) {
             console.log(err.response?.data?.error || "An error occurred while deleting the room")
         }
-        try { 
+        try {
             localStorage.removeItem("room-id");
             navigate("/home");
         } catch (err) {
@@ -138,10 +137,10 @@ function Sidebar() {
             <div className="my-2 mb-4">
                 <h1 className="text-2xl">EchoLab</h1>
                 <h3 className="text-gray-400">Room:
-                <button onClick={copyRoomIdToClipboard} className="text-sm text-black py-1 px-3 rounded mt-2">
-                    Copy Room ID
-                </button> 
-                {room}</h3>
+                    <button onClick={copyRoomIdToClipboard} className="text-sm text-black py-1 px-3 rounded mt-2">
+                        Copy Room ID
+                    </button>
+                    {room}</h3>
                 {showToast && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-green-500 text-white px-4 py-2 rounded">
@@ -155,7 +154,7 @@ function Sidebar() {
                     <ul>
                         {participants.map((participant, index) => (
                             <li key={index}>{participant}</li>
-                        ))} 
+                        ))}
                     </ul>
                 </div>
             </div>
@@ -183,25 +182,23 @@ function Sidebar() {
                 Sign Out
             </button>
             */}
-        </div>
-      </div>
-      <hr className="border-white-700" />
-      <div>
-        <h3 className="text-gray-400">Microphone Permission</h3>
-        <VoiceChannel />
-      </div>
-      
-      <hr className="border-white-700" />
-      <div className="mt-4">
-        <button
-          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-          onClick={handleLeaveRoom}
-        >
-          Leave Room
-        </button>
-      </div>
-    </div>
-  );
+            <hr className="border-white-700" />
+            <div>
+                <h3 className="text-gray-400">Microphone Permission</h3>
+                <VoiceChannel />
+            </div>
+
+            <hr className="border-white-700" />
+            <div className="mt-4">
+                <button
+                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+                    onClick={handleLeaveRoom}
+                >
+                    Leave Room
+                </button>
+            </div>
+        </div >
+    );
 }
 
 export default Sidebar;
