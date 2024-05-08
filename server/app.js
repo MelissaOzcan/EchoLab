@@ -6,7 +6,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import fs from 'fs';
-import { createServer } from 'http';
+import { createServer } from 'https';
 import { Server as SocketIOServer } from 'socket.io';
 import configRoutes from './api/index.js';
 
@@ -20,8 +20,8 @@ const sslOptions = {
     ca: fs.readFileSync('ssl/www_echolab_site.ca-bundle')
 };
 
-const httpServer = createServer(app, sslOptions);
-const io = new SocketIOServer(httpServer, {
+const httpsServer = createServer(app, sslOptions);
+const io = new SocketIOServer(httpsServer, {
     cors: {
         origin: '*'
     }
@@ -63,6 +63,6 @@ io.on('connection', (socket) => {
     });
 });
 
-httpServer.listen(process.env.PORT, '0.0.0.0', () => {
+httpsServer.listen(process.env.PORT, '0.0.0.0', () => {
     console.log(`We've got a server with HTTP and WebSocket on https://echolab.site:${process.env.PORT}/`);
 });
