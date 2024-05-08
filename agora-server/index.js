@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import pkg from 'agora-access-token';
 import cors from 'cors';
+import { createServer } from 'http';
 const { RtcTokenBuilder, RtmRole, RtcRole } = pkg;
 
 dotenv.config();
@@ -12,6 +13,7 @@ const APP_ID = process.env.APP_ID;
 const APP_CERTIFICATE = process.env.APP_CERTIFICATE;
 
 const app = express();
+const httpServer = createServer(app);
 
 const corsOptions = {
     origin: `http://localhost:${process.env.CLIENT_PORT}`,
@@ -74,7 +76,7 @@ app.use(cors(corsOptions));
 
 app.get('/access_token', nocache, generateAccessToken);
 
-app.listen(PORT, "0.0.0.0", () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`APP_ID: ${APP_ID}`)
     console.log(`APP_CERTIFICATE: ${APP_CERTIFICATE}`)
     console.log(`Server running on port ${PORT}`);
