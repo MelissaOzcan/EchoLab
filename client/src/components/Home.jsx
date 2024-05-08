@@ -87,20 +87,19 @@ function Home() {
                 <ul>
                     <h2>Welcome, {username}!</h2>
                     <form onSubmit={handleSubmitJoin}>
-                        <li>Room ID:
+                        Room ID:
                             <br />
-                            <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} /> </li>
+                            <input id='room-id' value={roomId} onChange={(e) => setRoomId(e.target.value)} />
                         <br />
                         <button type="submit">Join Room</button>
                     </form>
-                    <li>
-                        <li><form onSubmit={handleSubmitCreate}>
+                        <form onSubmit={handleSubmitCreate}>
                             <button type="submit">Create New Room</button>
-                        </form></li>
+                        </form>
                         <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={() => {
                             localStorage.removeItem('token');
                             navigate('/login');
-                        }}>Sign Out</button></li>
+                        }}>Sign Out</button>
                     <div className="mt-4">
                         <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" onClick={handleDeleteUser}>
                             Delete User
