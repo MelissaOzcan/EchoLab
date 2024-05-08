@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Echo from "../assets/Echo.png";
 
 function Login() {
@@ -51,7 +51,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/login", loginData);
+      const res = await axios.post("https://echolab.site:4000/login", loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("username", res.data.username);
       navigate("/home");

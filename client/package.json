@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@convergencelabs/monaco-collab-ext": "^0.4.0",
     "@monaco-editor/react": "^4.6.0",
     "agora-rtc-sdk-ng": "^4.20.2",
     "axios": "^1.6.8",

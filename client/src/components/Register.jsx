@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Echo from '../assets/Echo.png';
 
 function Register() {
@@ -15,7 +15,7 @@ function Register() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            navigate('/lang/python');
+            navigate('/home');
         }
 
         const interval = setInterval(createBubble, 300);
@@ -45,7 +45,7 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:4000/register', userData);
+            await axios.post('https://echolab.site:4000/register', userData);
             navigate("/login");
         } catch (err) {
             if (err.response.data.error) {

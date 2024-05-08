@@ -1,6 +1,6 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Echo from '../assets/Echo.png';
 
 function Home() {
@@ -39,7 +39,7 @@ function Home() {
     const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4000/home', { username: username }, {
+            const res = await axios.post('https://echolab.site:4000/home', { username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.newRoom._id;
@@ -53,7 +53,7 @@ function Home() {
     const handleSubmitJoin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:4000/home/join`, { roomId: roomId, username: username }, {
+            const res = await axios.post(`https://echolab.site:4000/home/join`, { roomId: roomId, username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.room._id
@@ -67,7 +67,7 @@ function Home() {
     const handleDeleteUser = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.delete(`http://localhost:4000/deleteuser/${username}`, {
+            const res = await axios.delete(`https://echolab.site:4000/deleteuser/${username}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             localStorage.removeItem('token');

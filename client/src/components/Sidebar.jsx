@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import "../index.css";
 import VoiceChannel from "./VoiceChannel";
-import { LuMic } from "react-icons/lu";
-import { LuMicOff } from "react-icons/lu";
 
 function Sidebar() {
     const [participants, setParticipants] = React.useState([]);
@@ -19,7 +17,7 @@ function Sidebar() {
     const [mediaStream, setMediaStream] = useState(null);
 
     useEffect(() => {
-        socketRef.current = io("http://localhost:4000");
+        socketRef.current = io("https://echolab.site:4000");
         handleParticipantsChange(participants);
         socketRef.current.on("updateParticipants", ({ channel, participants }) => {
             if (channel === room) {
@@ -42,7 +40,7 @@ function Sidebar() {
 
     const fetchParticipants = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/editor/participants/${room}`, {
+            const response = await axios.get(`https://echolab.site:4000/editor/participants/${room}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setParticipants(response.data.participants);
@@ -82,7 +80,7 @@ function Sidebar() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `http://localhost:4000/logout`,
+                `https://echolab.site:4000/logout`,
                 {
                     roomId: room,
                     username: user
@@ -111,7 +109,7 @@ function Sidebar() {
         handleParticipantsChange([]); // remove the current participant from the room
         try {
             const res = await axios.delete(
-                `http://localhost:4000/deleteroom/${room}`,
+                `https://echolab.site:4000/deleteroom/${room}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }

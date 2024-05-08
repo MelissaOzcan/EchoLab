@@ -1,7 +1,9 @@
-import express from 'express';
-import dotenv from 'dotenv';
 import pkg from 'agora-access-token';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import fs from 'fs';
+import https from 'https';
 const { RtcTokenBuilder, RtmRole, RtcRole } = pkg;
 
 dotenv.config();
@@ -13,8 +15,14 @@ const APP_CERTIFICATE = process.env.APP_CERTIFICATE;
 
 const app = express();
 
+const sslOptions = {
+    key: fs.readFileSync('./ssl/www_echolab_site.key'),
+    cert: fs.readFileSync('./ssl/www_echolab_site.crt'),
+    ca: fs.readFileSync('./ssl/www_echolab_site.ca-bundle')
+};
+
 const corsOptions = {
-    origin: `http://localhost:${process.env.CLIENT_PORT}`,
+    origin: `https://echolab.site:${process.env.CLIENT_PORT}`,
     optionsSuccessStatus: 200
 };
 
@@ -74,8 +82,10 @@ app.use(cors(corsOptions));
 
 app.get('/access_token', nocache, generateAccessToken);
 
-app.listen(PORT, "0.0.0.0", () => {
+const httpsServer = https.createServer(sslOptions, app);
+
+httpsServer.listen(PORT, "0.0.0.0", () => {
     console.log(`APP_ID: ${APP_ID}`)
     console.log(`APP_CERTIFICATE: ${APP_CERTIFICATE}`)
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running with HTTPS on port ${PORT}`);
 });

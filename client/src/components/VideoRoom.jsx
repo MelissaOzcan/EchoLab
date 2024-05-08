@@ -1,8 +1,7 @@
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { LuMic, LuMicOff } from "react-icons/lu";
 import { VideoPlayer } from "./VideoPlayer";
-import { LuMic } from "react-icons/lu";
-import { LuMicOff } from "react-icons/lu";
 //import { m } from "framer-motion";
 
 // 007eJxTYNh4qXDDJGXXgCjuDrO6heZ6QfrnlBIkrvzZqn/Z6sszixAFhtTElCSzVENjk+Q0MxPDFEMLY0Mj0xQLcxMzcyNTQ0NLDRnztIZARoZTH1ewMjJAIIjPwlCSWlzCwAAA2lYdzA==
@@ -51,7 +50,7 @@ export const VideoRoom = () => {
 
         let channel = room; 
         const response = await fetch(
-          `http://localhost:8080/access_token?channelName=${channel}&role=audience`
+          `https://echolab.site:8080/access_token?channelName=${channel}&role=audience`
         );
         const data = await response.json();
         console.log("data", data);
