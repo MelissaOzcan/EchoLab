@@ -28,7 +28,7 @@ const io = new SocketIOServer(httpServer, {
 });
 
 const corsOptions = {
-    origin: `https://3.142.174.77:${process.env.CLIENT_PORT}`,
+    origin: `*`,
     optionsSuccessStatus: 200
 };
 
@@ -64,5 +64,5 @@ io.on('connection', (socket) => {
 });
 
 httpServer.listen(process.env.PORT, '0.0.0.0', () => {
-    console.log(`We've got a server with HTTP and WebSocket on https://3.142.174.77:${process.env.PORT}/`);
+    console.log(`We've got a server with HTTP and WebSocket on https://echolab.site:${process.env.PORT}/`);
 });

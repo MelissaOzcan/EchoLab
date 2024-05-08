@@ -51,7 +51,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://3.142.174.77:4000/login", loginData);
+      const res = await axios.post("https://echolab.site:4000/login", loginData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("username", res.data.username);
       navigate("/home");
