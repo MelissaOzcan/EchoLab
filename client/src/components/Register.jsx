@@ -45,7 +45,7 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://echolab.site:4000/register', userData);
+            await axios.post('http://3.142.174.77:4000/register', userData);
             navigate("/login");
         } catch (err) {
             if (err.response.data.error) {

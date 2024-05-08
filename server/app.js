@@ -64,5 +64,5 @@ io.on('connection', (socket) => {
 });
 
 httpsServer.listen(process.env.PORT, '0.0.0.0', () => {
-    console.log(`We've got a server with HTTP and WebSocket on https://echolab.site:${process.env.PORT}/`);
+    console.log(`We've got a server with HTTP and WebSocket on http://3.142.174.77:${process.env.PORT}/`);
 });

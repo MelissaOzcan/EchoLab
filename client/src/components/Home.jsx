@@ -39,7 +39,7 @@ function Home() {
     const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('https://echolab.site:4000/home', { username: username }, {
+            const res = await axios.post('http://3.142.174.77:4000/home', { username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.newRoom._id;
@@ -53,7 +53,7 @@ function Home() {
     const handleSubmitJoin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`https://echolab.site:4000/home/join`, { roomId: roomId, username: username }, {
+            const res = await axios.post(`http://3.142.174.77:4000/home/join`, { roomId: roomId, username: username }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const id = res.data.room._id
@@ -67,7 +67,7 @@ function Home() {
     const handleDeleteUser = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.delete(`https://echolab.site:4000/deleteuser/${username}`, {
+            const res = await axios.delete(`http://3.142.174.77:4000/deleteuser/${username}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             localStorage.removeItem('token');

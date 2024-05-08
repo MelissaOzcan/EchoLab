@@ -27,7 +27,7 @@ function LanguageRunner() {
     const socketRef = useRef();
 
     useEffect(() => {
-        socketRef.current = io('https://echolab.site:4000');
+        socketRef.current = io('http://3.142.174.77:4000');
 
         socketRef.current.on('languageUpdate', ({ channel, language }) => {
             if (channel === id) {
@@ -62,7 +62,7 @@ function LanguageRunner() {
 
     const fetchCode = async (lang) => {
         try {
-            const res = await axios.get(`https://echolab.site:4000/editor/${id}`, {
+            const res = await axios.get(`http://3.142.174.77:4000/editor/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setCode(res.data.room[`${lang}Code`]);
@@ -80,7 +80,7 @@ function LanguageRunner() {
 
     const updateCodeInDatabase = async (code) => {
         try {
-            await axios.post(`https://echolab.site:4000/editor/${id}`, { code, lang: language }, {
+            await axios.post(`http://3.142.174.77:4000/editor/${id}`, { code, lang: language }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (err) {
@@ -96,7 +96,7 @@ function LanguageRunner() {
         setOutput("");
         setError("");
 
-        const compileUrl = `https://echolab.site:4000/compile/${language.toLowerCase()}`;
+        const compileUrl = `http://3.142.174.77:4000/compile/${language.toLowerCase()}`;
 
         try {
             const res = await axios.post(compileUrl, { code: userCode }, {
@@ -113,7 +113,7 @@ function LanguageRunner() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `https://echolab.site:4000/logout`,
+                `http://3.142.174.77:4000/logout`,
                 {
                     roomId: id,
                     username: user
