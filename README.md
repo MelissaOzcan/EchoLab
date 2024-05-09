@@ -12,16 +12,22 @@ The code running on the EC2 server in on the `nouman` branch. The code on `main`
 
 #### IMPORTANT
 
-You can access the deployed website by pasting the above URL in any browser. However, because the application is deployed to HTTP, and isn't authenticated using the SSL/TLS certificates, your browser will block the applications access to your microphone. 
+You can access the deployed website by pasting the above URL in any browser. However, because the application is deployed to HTTP, and isn't authenticated using the SSL/TLS certificates, your browser will block the applications access to your microphone, which prevents the audio call feature from working. 
 
 (We bought a domain (echolab.site) and got valid SSL certificates (on the `nouman` branch), but weren't able to successfully deploy on HTTPS)
 
 To access the website and all of it's features, follow the below steps.
+
 (NOTE: The instructions below only work for Google Chrome. But this can also be done for Firefox and all other Chromium based browsers)
-Step 1: 
+
+##### Step 1: 
+
 Quit/Close the Google Chrome application if it is open.
-Step 2:
+
+##### Step 2:
+
 Find the location for Google Chrome in your file system. It can usually be found in these locations.
+
 For MacOS:
 ```bash
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -36,12 +42,14 @@ for Linux:
 or
 "/usr/bin/chromium"
 ```
-Step 3:
+##### Step 3:
+
 Run the following command in your terminal after replacing `"/path/to/google/chrome"` with your path:
 ```bash
 "/path/to/google/chrome" --unsafely-treat-insecure-origin-as-secure="http://3.142.174.77:5173/" --user-data-dir="/tmp/chrome_dev_test"
 ```
-Step 4:
+##### Step 4:
+
 Running the above command will open a Google Chrome tab. You can paste the URL for our web application (`http://3.142.174.77:5173/`) here.
 
 ## How to Setup (Locally)
