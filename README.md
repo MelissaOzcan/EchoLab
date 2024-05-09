@@ -87,3 +87,10 @@ npm run dev
 - Sabah Naveed
 - Melissa Ozcan
 - Corey Heckel
+
+## Seed Users:
+email: admin1@gmail.com
+password: Password1@
+
+email: admin2@gmail.com
+password: Password2@
